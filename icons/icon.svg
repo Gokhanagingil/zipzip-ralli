@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">ZıpZıp Ralli uygulama simgesi</title>
+  <desc id="desc">Gülümseyen mavi bir çizgi araba ve sarı yıldız</desc>
+  <rect width="512" height="512" rx="116" fill="#49a7ff"/>
+  <circle cx="402" cy="105" r="62" fill="#ffd54a" stroke="#17202a" stroke-width="18"/>
+  <path d="m402 59 13 29 32 4-24 22 7 32-28-16-28 16 7-32-24-22 32-4z" fill="#fff8e7"/>
+  <ellipse cx="254" cy="409" rx="147" ry="30" fill="#17202a" opacity=".28"/>
+  <rect x="119" y="121" width="274" height="300" rx="92" fill="#2f8fe8" stroke="#17202a" stroke-width="22"/>
+  <rect x="151" y="158" width="210" height="124" rx="42" fill="#fff8e7" stroke="#17202a" stroke-width="18"/>
+  <ellipse cx="207" cy="219" rx="33" ry="45" fill="#fff" stroke="#17202a" stroke-width="14"/>
+  <ellipse cx="305" cy="219" rx="33" ry="45" fill="#fff" stroke="#17202a" stroke-width="14"/>
+  <circle cx="213" cy="226" r="12" fill="#17202a"/>
+  <circle cx="311" cy="226" r="12" fill="#17202a"/>
+  <path d="M197 330q59 70 118 0" fill="none" stroke="#17202a" stroke-width="18" stroke-linecap="round"/>
+  <ellipse cx="256" cy="374" rx="29" ry="23" fill="#f074b5" stroke="#17202a" stroke-width="12"/>
+  <rect x="91" y="186" width="35" height="88" rx="16" fill="#17202a"/>
+  <rect x="386" y="186" width="35" height="88" rx="16" fill="#17202a"/>
+  <rect x="91" y="320" width="35" height="68" rx="16" fill="#17202a"/>
+  <rect x="386" y="320" width="35" height="68" rx="16" fill="#17202a"/>
+</svg>

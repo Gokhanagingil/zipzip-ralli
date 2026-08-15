@@ -1,0 +1,50 @@
+import assert from "node:assert/strict";
+import { access, readFile } from "node:fs/promises";
+import { constants } from "node:fs";
+
+const files = [
+  "index.html",
+  "manifest.webmanifest",
+  "sw.js",
+  ".nojekyll",
+  "icons/icon.svg",
+  "icons/icon-192.png",
+  "icons/icon-512.png",
+  ".github/workflows/ci.yml",
+  ".github/workflows/deploy-pages.yml"
+];
+
+await Promise.all(files.map((file) => access(new URL(`../${file}`, import.meta.url), constants.R_OK)));
+
+const index = await readFile(new URL("../index.html", import.meta.url), "utf8");
+const manifest = JSON.parse(await readFile(new URL("../manifest.webmanifest", import.meta.url), "utf8"));
+const worker = await readFile(new URL("../sw.js", import.meta.url), "utf8");
+const deployment = await readFile(new URL("../.github/workflows/deploy-pages.yml", import.meta.url), "utf8");
+
+assert.match(index, /<html lang="tr"/);
+assert.match(index, /id="zzr-game"/);
+assert.match(index, /id="zzr-steer-zone"/);
+assert.match(index, /id="zzr-jump"/);
+assert.match(index, /data-model="bubble"/);
+assert.match(index, /navigator\.serviceWorker\.register\("\.\/sw\.js"\)/);
+assert.equal(manifest.display, "fullscreen");
+assert.equal(manifest.orientation, "landscape");
+assert.equal(manifest.icons.length, 2);
+assert.match(worker, /CACHE_NAME = "zipzip-ralli-v1"/);
+assert.match(worker, /caches\.match/);
+assert.match(deployment, /actions\/checkout@v6/);
+assert.match(deployment, /actions\/configure-pages@v5/);
+assert.match(deployment, /actions\/upload-pages-artifact@v4/);
+assert.match(deployment, /actions\/deploy-pages@v4/);
+assert.match(deployment, /pages: write/);
+assert.match(deployment, /id-token: write/);
+
+const ids = [...index.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+const duplicates = ids.filter((id, indexOfId) => ids.indexOf(id) !== indexOfId);
+assert.deepEqual([...new Set(duplicates)], []);
+
+const inlineGame = index.match(/<script>\s*\(\(\) => \{([\s\S]*?)<\/script>/);
+assert.ok(inlineGame, "Oyun JavaScript'i bulunamadı");
+new Function(`(() => {${inlineGame[1]}`);
+
+console.log(`Doğrulama başarılı: ${files.length} PWA dosyası, ${ids.length} benzersiz id.`);
