@@ -836,20 +836,34 @@ svg {
     <div class="zzr-score-group">
       <span class="viz-badge">PUAN <strong id="zzr-score">0</strong></span>
       <span class="viz-badge">TUR <strong id="zzr-lap">1/2</strong></span>
+      <span class="viz-badge">SIRA <strong id="zzr-rank">1/5</strong></span>
+      <span class="viz-badge zzr-combo-badge zzr-hidden" id="zzr-combo">KOMBO ×2</span>
+      <span class="viz-badge zzr-power-badge zzr-hidden" id="zzr-power">⚡ TURBO</span>
     </div>
     <div class="zzr-hud-actions">
-      <button type="button" class="btn btn-ghost" id="zzr-sound" aria-label="Sesi kapat" aria-pressed="true">Ses açık</button>
-      <button type="button" class="btn btn-ghost" id="zzr-pause" aria-label="Oyunu duraklat">Duraklat</button>
+      <button type="button" class="btn btn-ghost zzr-icon-button" id="zzr-sound" aria-label="Sesi kapat" aria-pressed="true">🔊</button>
+      <button type="button" class="btn btn-ghost zzr-icon-button" id="zzr-pause" aria-label="Oyunu duraklat">Ⅱ</button>
     </div>
   </div>
 
   <div class="zzr-toast" id="zzr-toast" role="status" aria-live="polite"></div>
+
+  <div class="zzr-countdown zzr-hidden" id="zzr-countdown" aria-live="assertive">
+    <strong id="zzr-countdown-number">3</strong>
+    <span>↔ Direksiyonu sürükle · ZIPLA!’ya dokun</span>
+  </div>
 
   <section class="zzr-screen" id="zzr-menu" aria-labelledby="zzr-title">
     <div class="card zzr-menu-card">
       <div class="zzr-sticker" aria-hidden="true">BOING!</div>
       <h2 id="zzr-title">ZıpZıp Ralli</h2>
       <p id="zzr-tagline">Bugün yerçekimi biraz izinli.</p>
+      <div class="zzr-track-grid" id="zzr-tracks" aria-label="Parkur seç">
+        <button type="button" class="btn zzr-track is-selected" data-track="neighborhood" aria-pressed="true"><span>🏘️</span>Tuhaf Mahalle</button>
+        <button type="button" class="btn zzr-track" data-track="candy" aria-pressed="false"><span>🍭</span>Şeker Kanyon</button>
+        <button type="button" class="btn zzr-track" data-track="space" aria-pressed="false"><span>🪐</span>Uzay Otoparkı</button>
+      </div>
+      <p class="zzr-track-note" id="zzr-track-note">En iyi: ☆☆☆ · Dengeli virajlar</p>
       <div class="zzr-menu-actions">
         <button type="button" class="btn btn-primary btn-block" id="zzr-start">Yarışa başla</button>
         <button type="button" class="btn btn-block" id="zzr-open-garage">Garaja gir</button>
@@ -873,9 +887,9 @@ svg {
       <fieldset class="zzr-fieldset">
         <legend>Model</legend>
         <div class="zzr-choice-grid" id="zzr-models">
-          <button type="button" class="btn zzr-choice" data-model="bubble" aria-pressed="true"><span aria-hidden="true">🚗</span> Pofuduk</button>
-          <button type="button" class="btn zzr-choice" data-model="rocket" aria-pressed="false"><span aria-hidden="true">🏎️</span> Roket</button>
-          <button type="button" class="btn zzr-choice" data-model="monster" aria-pressed="false"><span aria-hidden="true">🚙</span> Mini Canavar</button>
+          <button type="button" class="btn zzr-choice" data-model="bubble" aria-pressed="true"><span><span aria-hidden="true">🚗</span> Pofuduk</span><small>Dengeli</small></button>
+          <button type="button" class="btn zzr-choice" data-model="rocket" aria-pressed="false"><span><span aria-hidden="true">🏎️</span> Roket</span><small>Hızlı · yüksek zıplar</small></button>
+          <button type="button" class="btn zzr-choice" data-model="monster" aria-pressed="false"><span><span aria-hidden="true">🚙</span> Mini Canavar</span><small>Çimde ve çarpışmada güçlü</small></button>
         </div>
       </fieldset>
       <fieldset class="zzr-fieldset">
@@ -907,7 +921,10 @@ svg {
     <div class="card zzr-small-card">
       <div class="zzr-sticker" aria-hidden="true">VİYUUU!</div>
       <h3 id="zzr-finish-title">Parkur tamam!</h3>
+      <p class="zzr-finish-place" id="zzr-finish-place">🥇 1. oldun!</p>
       <p>Toplam puan: <strong id="zzr-final-score">0</strong></p>
+      <p class="zzr-finish-stars" id="zzr-finish-stars" aria-label="Kazanılan yıldızlar">☆☆☆</p>
+      <p class="text-small" id="zzr-mission-line"></p>
       <p class="text-small text-muted" id="zzr-best-line"></p>
       <div class="zzr-menu-actions">
         <button type="button" class="btn btn-primary btn-block" id="zzr-again">Bir daha!</button>
@@ -1030,6 +1047,39 @@ svg {
     background: var(--zzr-panel);
     color: var(--zzr-panel-ink);
   }
+  #zzr-game .zzr-combo-badge { background: var(--zzr-c); transform: rotate(-2deg); }
+  #zzr-game .zzr-power-badge { background: var(--zzr-a); color: #ffffff; }
+  #zzr-game .zzr-icon-button {
+    width: 38px;
+    min-width: 38px;
+    min-height: 34px;
+    padding: 0;
+    color: var(--zzr-ink);
+    background: rgba(255, 253, 247, 0.9);
+    font-size: 17px;
+  }
+
+  #zzr-game .zzr-countdown {
+    position: absolute;
+    z-index: 9;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    width: min(430px, 72%);
+    padding: 12px 18px;
+    transform: translate(-50%, -50%) rotate(-1deg);
+    border: 3px solid var(--zzr-ink);
+    border-radius: 18px 8px 20px 10px;
+    color: var(--zzr-ink);
+    background: rgba(255, 253, 247, 0.94);
+    box-shadow: 0 8px 0 rgba(23, 32, 42, 0.22);
+    text-align: center;
+    pointer-events: none;
+  }
+  #zzr-game .zzr-countdown strong { font-size: clamp(38px, 12vh, 78px); line-height: 0.9; }
+  #zzr-game .zzr-countdown span { font-weight: 650; }
 
   #zzr-game .zzr-screen {
     position: absolute;
@@ -1078,6 +1128,38 @@ svg {
     margin-top: 16px;
   }
 
+  #zzr-game .zzr-track-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-top: 10px;
+  }
+  #zzr-game .zzr-track {
+    min-width: 0;
+    min-height: 54px;
+    padding: 6px;
+    flex-direction: column;
+    gap: 1px;
+    overflow: hidden;
+    font-size: 11px;
+    line-height: 14px;
+    white-space: normal;
+  }
+  #zzr-game .zzr-track span { font-size: 20px; line-height: 22px; }
+  #zzr-game .zzr-track.is-selected {
+    border-color: var(--zzr-ink);
+    color: #ffffff;
+    background: var(--zzr-a);
+    box-shadow: inset 0 0 0 1px var(--zzr-ink);
+  }
+  #zzr-game .zzr-track-note {
+    min-height: 16px;
+    margin: 5px 0 0 !important;
+    color: var(--muted-foreground);
+    font-size: 11px;
+    line-height: 15px;
+  }
+
   #zzr-game .zzr-garage-card {
     width: 90%;
     width: min(720px, 90%);
@@ -1123,6 +1205,19 @@ svg {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
+  }
+
+  #zzr-game .zzr-choice {
+    min-height: 50px;
+    flex-direction: column;
+    gap: 1px;
+    padding-block: 5px;
+    white-space: normal;
+  }
+  #zzr-game .zzr-choice small {
+    font-size: 9px;
+    line-height: 11px;
+    opacity: 0.72;
   }
 
   #zzr-game .zzr-choice[aria-pressed="true"] {
@@ -1257,6 +1352,18 @@ svg {
 
   #zzr-game .zzr-toast.is-visible { opacity: 1; transform: translate(-50%, 0) rotate(-2deg); }
 
+  #zzr-game .zzr-finish-place {
+    color: #176cae;
+    font-size: 22px;
+    font-weight: 750;
+  }
+  #zzr-game .zzr-finish-stars {
+    margin-block: 2px !important;
+    color: #e5a900;
+    font-size: 30px;
+    letter-spacing: 3px;
+  }
+
   #zzr-game .zzr-portrait {
     display: none;
     position: absolute;
@@ -1298,6 +1405,10 @@ svg {
     #zzr-game .zzr-menu-card p,
     #zzr-game .zzr-small-card p { margin: 4px 0 8px; }
     #zzr-game .zzr-menu-actions { margin-top: 7px; gap: 6px; }
+    #zzr-game .zzr-track-grid { margin-top: 5px; }
+    #zzr-game .zzr-track { min-height: 46px; padding: 3px; }
+    #zzr-game .zzr-track span { font-size: 17px; line-height: 18px; }
+    #zzr-game .zzr-track-note { margin-top: 2px !important; }
     #zzr-game .zzr-hud { top: 6px; right: 8px; left: 8px; }
     #zzr-game .zzr-controls { right: 10px; bottom: 7px; left: 10px; }
     #zzr-game .zzr-control-label { font-size: 10px; line-height: 14px; }
@@ -1309,6 +1420,10 @@ svg {
     #zzr-game .zzr-jump { width: 80px; height: 80px; }
     #zzr-game .zzr-hud .viz-badge { padding: 2px 6px; }
     #zzr-game .zzr-hud-actions .btn { min-height: 26px; padding-inline: 6px; }
+    #zzr-game .zzr-countdown span { font-size: 11px; }
+    #zzr-game .zzr-track { min-height: 40px; font-size: 10px; line-height: 11px; }
+    #zzr-game .zzr-track span { display: none; }
+    #zzr-game .zzr-menu-card > .text-small { display: none; }
   }
 
   @supports (padding: env(safe-area-inset-left)) {
@@ -1351,8 +1466,17 @@ svg {
     controls: root.querySelector("#zzr-controls"),
     score: root.querySelector("#zzr-score"),
     lap: root.querySelector("#zzr-lap"),
+    rank: root.querySelector("#zzr-rank"),
+    combo: root.querySelector("#zzr-combo"),
+    power: root.querySelector("#zzr-power"),
     toast: root.querySelector("#zzr-toast"),
+    countdown: root.querySelector("#zzr-countdown"),
+    countdownNumber: root.querySelector("#zzr-countdown-number"),
+    trackNote: root.querySelector("#zzr-track-note"),
     finalScore: root.querySelector("#zzr-final-score"),
+    finishPlace: root.querySelector("#zzr-finish-place"),
+    finishStars: root.querySelector("#zzr-finish-stars"),
+    missionLine: root.querySelector("#zzr-mission-line"),
     bestLine: root.querySelector("#zzr-best-line"),
     sound: root.querySelector("#zzr-sound"),
     pause: root.querySelector("#zzr-pause"),
@@ -1371,6 +1495,72 @@ svg {
   const DRAW_DISTANCE = 210;
   const MAX_SPEED = SEGMENT_LENGTH * 43;
   const TOTAL_LAPS = 2;
+  const TRACK_ORDER = ["neighborhood", "candy", "space"];
+  const TRACKS = {
+    neighborhood: {
+      name: "Tuhaf Mahalle",
+      note: "Dengeli virajlar · konuşan koniler",
+      seed: 246813579,
+      targetScore: 850,
+      skyTop: "#54b2ff",
+      skyBottom: "#fff8e7",
+      mountain: "#9b79ec",
+      grass: "#75d68a",
+      road: "#fffdf7",
+      rumble: "#ffd54a",
+      decor: "#f074b5",
+      roads: [
+        [20, 45, 20, 0], [25, 58, 28, 0.85], [18, 35, 18, 0],
+        [28, 68, 30, -1.15], [16, 28, 16, 0.45], [22, 48, 22, 0],
+        [28, 62, 26, 1.3], [18, 36, 18, -0.55], [24, 52, 24, 0],
+        [30, 70, 30, -1.25], [16, 32, 18, 0.65], [22, 48, 22, 0]
+      ]
+    },
+    candy: {
+      name: "Şeker Kanyon",
+      note: "Akıcı virajlar · bol ödül ve rampalar",
+      seed: 975318642,
+      targetScore: 1250,
+      skyTop: "#f49dca",
+      skyBottom: "#fff3c9",
+      mountain: "#ffbf69",
+      grass: "#8be0ad",
+      road: "#fff7fb",
+      rumble: "#79c9ff",
+      decor: "#df5f9e",
+      roads: [
+        [18, 42, 18, 0.35], [20, 46, 20, -0.72], [16, 30, 16, 0],
+        [24, 56, 24, 1.02], [18, 34, 18, -0.42], [20, 44, 20, 0],
+        [24, 60, 24, -1.08], [16, 30, 16, 0.64], [20, 48, 20, 0],
+        [22, 52, 22, 0.92], [18, 36, 18, -0.68], [20, 42, 20, 0]
+      ]
+    },
+    space: {
+      name: "Uzay Otoparkı",
+      note: "Keskin dönüşler · turbo olmadan zor",
+      seed: 314159265,
+      targetScore: 1650,
+      skyTop: "#17214d",
+      skyBottom: "#4655a8",
+      mountain: "#684fc5",
+      grass: "#29356f",
+      road: "#e9ebff",
+      rumble: "#ff70b7",
+      decor: "#ffd54a",
+      roads: [
+        [18, 35, 18, 0], [16, 42, 18, 1.22], [14, 24, 14, -0.7],
+        [20, 50, 22, -1.45], [14, 26, 14, 0.82], [18, 38, 18, 0],
+        [20, 54, 22, 1.52], [14, 28, 14, -0.92], [18, 42, 18, 0.42],
+        [22, 58, 22, -1.38], [14, 28, 14, 0.98], [20, 42, 20, 0]
+      ]
+    }
+  };
+  const OPPONENT_SPECS = [
+    { name: "Mırmır", model: "bubble", color: "#f074b5", speed: 0.85, lane: -0.52, start: 520 },
+    { name: "Tostçu", model: "monster", color: "#ff8b45", speed: 0.89, lane: 0.48, start: 180 },
+    { name: "Vınn", model: "rocket", color: "#9b79ec", speed: 0.94, lane: -0.12, start: -120 },
+    { name: "Çorapçı", model: "bubble", color: "#75d68a", speed: 0.875, lane: 0.18, start: -460 }
+  ];
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -1399,6 +1589,7 @@ svg {
   let palette = readPalette();
   const colorKeys = ["a", "b", "c", "d", "e", "f"];
   const settings = loadSettings();
+  const progress = loadProgress();
   let bestScore = readNumber("zzr-best", 0);
   let audioContext = null;
   let soundEnabled = settings.sound !== false;
@@ -1442,10 +1633,21 @@ svg {
     playerX: 0,
     score: 0,
     lap: 0,
+    rank: 1,
+    countdown: 0,
     jumpY: 0,
     jumpVelocity: 0,
+    airAction: false,
+    rampJump: false,
+    perfectLandings: 0,
+    combo: 0,
+    comboTimer: 0,
+    boostTimer: 0,
+    magnetTimer: 0,
+    shield: 0,
     hitCooldown: 0,
     offroadTimer: 0,
+    opponents: [],
     particles: [],
     visible: []
   };
@@ -1465,15 +1667,40 @@ svg {
       return {
         model: ["bubble", "rocket", "monster"].includes(parsed.model) ? parsed.model : "bubble",
         color: clamp(Number(parsed.color) || 0, 0, 5),
+        track: TRACK_ORDER.includes(parsed.track) ? parsed.track : "neighborhood",
         sound: parsed.sound !== false
       };
     } catch (_) {
-      return { model: "bubble", color: 0, sound: true };
+      return { model: "bubble", color: 0, track: "neighborhood", sound: true };
     }
   }
 
   function saveSettings() {
     try { localStorage.setItem("zzr-settings", JSON.stringify(settings)); } catch (_) { /* storage may be unavailable */ }
+  }
+
+  function loadProgress() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem("zzr-progress") || "{}");
+      const trackStars = parsed.trackStars && typeof parsed.trackStars === "object" ? parsed.trackStars : {};
+      return {
+        trackStars: {
+          neighborhood: clamp(Number(trackStars.neighborhood) || 0, 0, 3),
+          candy: clamp(Number(trackStars.candy) || 0, 0, 3),
+          space: clamp(Number(trackStars.space) || 0, 0, 3)
+        }
+      };
+    } catch (_) {
+      return { trackStars: { neighborhood: 0, candy: 0, space: 0 } };
+    }
+  }
+
+  function saveProgress() {
+    try { localStorage.setItem("zzr-progress", JSON.stringify(progress)); } catch (_) { /* storage may be unavailable */ }
+  }
+
+  function currentTrack() {
+    return TRACKS[settings.track] || TRACKS.neighborhood;
   }
 
   function readNumber(key, fallback) {
@@ -1507,53 +1734,60 @@ svg {
 
   function buildTrack() {
     segments.length = 0;
-    addRoad(20, 45, 20, 0);
-    addRoad(25, 58, 28, 0.85);
-    addRoad(18, 35, 18, 0);
-    addRoad(28, 68, 30, -1.15);
-    addRoad(16, 28, 16, 0.45);
-    addRoad(22, 48, 22, 0);
-    addRoad(28, 62, 26, 1.3);
-    addRoad(18, 36, 18, -0.55);
-    addRoad(24, 52, 24, 0);
-    addRoad(30, 70, 30, -1.25);
-    addRoad(16, 32, 18, 0.65);
-    addRoad(22, 48, 22, 0);
+    currentTrack().roads.forEach((road) => addRoad(road[0], road[1], road[2], road[3]));
     trackLength = segments.length * SEGMENT_LENGTH;
     populateTrack();
   }
 
   function populateTrack() {
-    randomState = 246813579;
+    randomState = currentTrack().seed;
     let index = 34;
     let itemId = 0;
     const offsets = [-0.72, -0.35, 0, 0.35, 0.72];
-    while (index < segments.length - 18) {
-      index += 6 + Math.floor(seeded() * 7);
-      const reward = seeded() < 0.62;
-      const type = reward
-        ? (["star", "coin", "bolt"][Math.floor(seeded() * 3)])
-        : (["cone", "crate", "puddle", "sock"][Math.floor(seeded() * 4)]);
-      const offset = offsets[Math.floor(seeded() * offsets.length)];
-      segments[index].items.push({
+
+    const addItem = (segmentIndex, type, offset) => {
+      if (segmentIndex < 0 || segmentIndex >= segments.length) return;
+      const reward = ["star", "coin", "bolt", "shield", "magnet"].includes(type);
+      segments[segmentIndex].items.push({
         id: itemId,
         type,
         offset,
         reward,
+        ramp: type === "ramp",
         touchedLap: -1,
         bob: seeded() * Math.PI * 2
       });
       itemId += 1;
-      if (reward && seeded() < 0.3 && index + 2 < segments.length) {
-        segments[index + 2].items.push({
-          id: itemId,
-          type: "star",
-          offset: clamp(offset + (seeded() > 0.5 ? 0.34 : -0.34), -0.72, 0.72),
-          reward: true,
-          touchedLap: -1,
-          bob: seeded() * Math.PI * 2
+    };
+
+    while (index < segments.length - 18) {
+      index += 6 + Math.floor(seeded() * 7);
+      const offset = offsets[Math.floor(seeded() * offsets.length)];
+      const roll = seeded();
+      const rampChance = settings.track === "candy" ? 0.14 : 0.095;
+
+      if (roll < rampChance) {
+        addItem(index, "ramp", offset);
+        [2, 4, 6].forEach((ahead, trailIndex) => {
+          addItem(index + ahead, trailIndex === 1 ? "coin" : "star", offset);
         });
-        itemId += 1;
+        index += 6;
+        continue;
+      }
+
+      if (roll < 0.69) {
+        const rewardRoll = seeded();
+        const type = rewardRoll < 0.42 ? "star"
+          : rewardRoll < 0.64 ? "coin"
+            : rewardRoll < 0.78 ? "bolt"
+              : rewardRoll < 0.89 ? "shield" : "magnet";
+        addItem(index, type, offset);
+        if (seeded() < 0.32) {
+          addItem(index + 2, "star", clamp(offset + (seeded() > 0.5 ? 0.34 : -0.34), -0.72, 0.72));
+        }
+      } else {
+        const type = ["cone", "crate", "puddle", "sock"][Math.floor(seeded() * 4)];
+        addItem(index, type, offset);
       }
     }
   }
@@ -1585,22 +1819,23 @@ svg {
   }
 
   function renderSegment(segment, n) {
+    const theme = currentTrack();
     const p1 = segment.p1.screen;
     const p2 = segment.p2.screen;
     const alt = Math.floor(segment.index / 3) % 2;
     ctx.globalAlpha = alt ? 0.46 : 0.56;
-    ctx.fillStyle = palette.d;
+    ctx.fillStyle = theme.grass;
     ctx.fillRect(0, p2.y, W, p1.y - p2.y);
     ctx.globalAlpha = 1;
 
     const rumble1 = p1.w * 1.18;
     const rumble2 = p2.w * 1.18;
-    polygon(ctx, alt ? palette.c : palette.paper,
+    polygon(ctx, alt ? theme.rumble : palette.paper,
       p1.x - rumble1, p1.y,
       p1.x + rumble1, p1.y,
       p2.x + rumble2, p2.y,
       p2.x - rumble2, p2.y);
-    polygon(ctx, palette.panel,
+    polygon(ctx, theme.road,
       p1.x - p1.w, p1.y,
       p1.x + p1.w, p1.y,
       p2.x + p2.w, p2.y,
@@ -1626,22 +1861,43 @@ svg {
   }
 
   function drawBackground(curveDrift) {
+    const theme = currentTrack();
     const sky = ctx.createLinearGradient(0, 0, 0, H * 0.58);
-    sky.addColorStop(0, palette.a);
-    sky.addColorStop(1, palette.paper);
+    sky.addColorStop(0, theme.skyTop);
+    sky.addColorStop(1, theme.skyBottom);
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, W, H);
 
-    ctx.globalAlpha = 0.34;
-    ctx.fillStyle = palette.b;
     const cloudOffset = wrap(game.distance * 0.006 + curveDrift * 18, W + 260);
-    drawCloud(160 - cloudOffset, 105, 1.1, "•ᴗ•");
-    drawCloud(720 - cloudOffset, 72, 0.72, "•̀ᴗ•́");
-    drawCloud(1260 - cloudOffset, 135, 0.9, "•﹏•");
-    drawCloud(1540 - cloudOffset, 90, 1, "•ᴗ•");
+    if (settings.track === "space") {
+      ctx.fillStyle = "#fff7b2";
+      for (let i = 0; i < 44; i += 1) {
+        const x = wrap(i * 173 - game.distance * 0.0018, W + 80) - 40;
+        const y = 22 + ((i * 71) % 205);
+        const radius = i % 7 === 0 ? 3 : 1.5;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 0.88;
+      ctx.fillStyle = "#ffd54a";
+      ctx.beginPath();
+      ctx.arc(W * 0.78, 88, 42, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = theme.skyTop;
+      ctx.beginPath();
+      ctx.ellipse(W * 0.78, 88, 67, 13, -0.18, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      ctx.globalAlpha = settings.track === "candy" ? 0.52 : 0.34;
+      drawCloud(160 - cloudOffset, 105, 1.1, settings.track === "candy" ? "•◡•" : "•ᴗ•");
+      drawCloud(720 - cloudOffset, 72, 0.72, "•̀ᴗ•́");
+      drawCloud(1260 - cloudOffset, 135, 0.9, "•﹏•");
+      drawCloud(1540 - cloudOffset, 90, 1, "•ᴗ•");
+    }
     ctx.globalAlpha = 1;
 
-    ctx.fillStyle = palette.e;
+    ctx.fillStyle = theme.mountain;
     ctx.globalAlpha = 0.58;
     ctx.beginPath();
     ctx.moveTo(0, 250);
@@ -1674,6 +1930,7 @@ svg {
   }
 
   function drawRoadsideDoodle(segment, side) {
+    const theme = currentTrack();
     const p = segment.p1.screen;
     const scale = p.scale * W * 0.36;
     if (scale < 2 || p.y > H + 30 || p.y < 145) return;
@@ -1682,7 +1939,7 @@ svg {
     ctx.save();
     ctx.translate(x, p.y);
     ctx.scale(side, 1);
-    ctx.fillStyle = segment.index % 46 === 0 ? palette.b : palette.f;
+    ctx.fillStyle = segment.index % 46 === 0 ? theme.decor : theme.rumble;
     ctx.strokeStyle = palette.ink;
     ctx.lineWidth = Math.max(1, size * 0.05);
     if (segment.index % 69 === 0) {
@@ -1691,7 +1948,8 @@ svg {
       ctx.fillStyle = palette.ink;
       ctx.font = `500 ${Math.max(7, size * 0.21)}px ui-rounded, system-ui`;
       ctx.textAlign = "center";
-      ctx.fillText("ÇORAP?", 0, -size * 0.72);
+      const sign = settings.track === "candy" ? "ŞEKER?" : settings.track === "space" ? "DÜNYA?" : "ÇORAP?";
+      ctx.fillText(sign, 0, -size * 0.72);
     } else {
       ctx.beginPath();
       ctx.arc(0, -size * 0.55, size * 0.46, 0, Math.PI * 2);
@@ -1742,7 +2000,9 @@ svg {
     if (p.y > H + 30 || p.y < 145) return;
     const scale = p.scale * W / 2;
     const x = p.x + p.w * item.offset;
-    const baseSize = clamp(scale * (item.reward ? 115 : 150), 4, item.reward ? 76 : 96);
+    const sizeFactor = item.ramp ? 175 : item.reward ? 115 : 150;
+    const maxSize = item.ramp ? 118 : item.reward ? 76 : 96;
+    const baseSize = clamp(scale * sizeFactor, 4, maxSize);
     const bob = item.reward ? Math.sin(performance.now() * 0.005 + item.bob) * baseSize * 0.12 : 0;
     const y = p.y - baseSize * 0.35 - bob;
     ctx.save();
@@ -1755,7 +2015,10 @@ svg {
   function drawReward(type, size) {
     ctx.strokeStyle = palette.ink;
     ctx.lineWidth = Math.max(1, size * 0.07);
-    ctx.fillStyle = type === "star" ? palette.c : type === "bolt" ? palette.a : palette.f;
+    ctx.fillStyle = type === "star" ? palette.c
+      : type === "bolt" ? palette.a
+        : type === "shield" ? "#8de8ff"
+          : type === "magnet" ? palette.b : palette.f;
     if (type === "star") {
       ctx.beginPath();
       for (let i = 0; i < 10; i += 1) {
@@ -1771,6 +2034,30 @@ svg {
     } else if (type === "bolt") {
       polygon(ctx, palette.a, -size * 0.08, -size * 0.5, size * 0.28, -size * 0.12, size * 0.06, -size * 0.08, size * 0.16, size * 0.5, -size * 0.28, size * 0.08, -size * 0.04, size * 0.04);
       ctx.stroke();
+    } else if (type === "shield") {
+      ctx.globalAlpha = 0.82;
+      ctx.beginPath();
+      ctx.arc(0, 0, size * 0.48, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.stroke();
+      ctx.fillStyle = palette.paper;
+      polygon(ctx, palette.paper, 0, -size * 0.3, size * 0.23, -size * 0.08, size * 0.15, size * 0.27, 0, size * 0.38, -size * 0.15, size * 0.27, -size * 0.23, -size * 0.08);
+    } else if (type === "magnet") {
+      ctx.lineWidth = Math.max(3, size * 0.18);
+      ctx.lineCap = "round";
+      ctx.strokeStyle = palette.b;
+      ctx.beginPath();
+      ctx.arc(0, -size * 0.04, size * 0.31, 0.05 * Math.PI, 0.95 * Math.PI);
+      ctx.stroke();
+      ctx.strokeStyle = palette.a;
+      ctx.beginPath();
+      ctx.moveTo(-size * 0.3, -size * 0.02);
+      ctx.lineTo(-size * 0.36, size * 0.3);
+      ctx.moveTo(size * 0.3, -size * 0.02);
+      ctx.lineTo(size * 0.36, size * 0.3);
+      ctx.stroke();
+      ctx.lineCap = "butt";
     } else {
       ctx.beginPath();
       ctx.arc(0, 0, size * 0.42, 0, Math.PI * 2);
@@ -1784,13 +2071,29 @@ svg {
     ctx.fillStyle = palette.ink;
     ctx.font = `500 ${Math.max(7, size * 0.24)}px ui-rounded, system-ui`;
     ctx.textAlign = "center";
-    if (type !== "bolt") ctx.fillText("•ᴗ•", 0, size * 0.09);
+    if (type === "star" || type === "coin") ctx.fillText("•ᴗ•", 0, size * 0.09);
   }
 
   function drawObstacle(type, size) {
     ctx.strokeStyle = palette.ink;
     ctx.lineWidth = Math.max(1, size * 0.06);
-    if (type === "cone") {
+    if (type === "ramp") {
+      polygon(ctx, currentTrack().rumble,
+        -size * 0.58, size * 0.4,
+        size * 0.58, size * 0.4,
+        size * 0.36, -size * 0.32,
+        -size * 0.36, -size * 0.32);
+      ctx.strokeStyle = palette.ink;
+      ctx.beginPath();
+      ctx.moveTo(-size * 0.58, size * 0.4);
+      ctx.lineTo(-size * 0.36, -size * 0.32);
+      ctx.lineTo(size * 0.36, -size * 0.32);
+      ctx.lineTo(size * 0.58, size * 0.4);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = palette.paper;
+      ctx.fillRect(-size * 0.3, -size * 0.03, size * 0.6, size * 0.12);
+    } else if (type === "cone") {
       polygon(ctx, palette.f, -size * 0.35, size * 0.45, 0, -size * 0.5, size * 0.35, size * 0.45);
       ctx.stroke();
       ctx.fillStyle = palette.paper;
@@ -1934,8 +2237,61 @@ svg {
   function drawPlayer() {
     const carScale = settings.model === "monster" ? 0.52 : 0.48;
     const lift = game.jumpY * 0.72;
-    const bounce = state === "playing" ? Math.sin(game.distance * 0.012) * 2 : Math.sin(performance.now() * 0.002) * 3;
+    const bounce = state === "playing" || state === "countdown" ? Math.sin(game.distance * 0.012) * 2 : Math.sin(performance.now() * 0.002) * 3;
     drawCar(ctx, W / 2 + steering * 22, H - 115 - lift + bounce, carScale + game.jumpY * 0.00018, settings.model, palette[colorKeys[settings.color]], steering, game.jumpY);
+  }
+
+  function resetOpponents() {
+    game.opponents = OPPONENT_SPECS.map((spec, index) => ({
+      ...spec,
+      distance: spec.start,
+      phase: index * 1.7 + currentTrack().seed * 0.000001
+    }));
+    updateRank();
+  }
+
+  function updateOpponents(dt) {
+    const difficulty = settings.track === "space" ? 1.025 : settings.track === "candy" ? 1 : 0.975;
+    game.opponents.forEach((opponent) => {
+      const wobble = 1 + Math.sin(game.distance * 0.000035 + opponent.phase) * 0.018;
+      opponent.distance += MAX_SPEED * opponent.speed * difficulty * wobble * dt;
+      opponent.laneNow = clamp(opponent.lane + Math.sin(opponent.distance * 0.000055 + opponent.phase) * 0.16, -0.76, 0.76);
+    });
+    updateRank();
+  }
+
+  function updateRank() {
+    game.rank = 1 + game.opponents.filter((opponent) => opponent.distance > game.distance).length;
+  }
+
+  function drawOpponents() {
+    game.opponents
+      .map((opponent) => ({ opponent, relative: opponent.distance - game.distance }))
+      .filter((entry) => entry.relative > 90 && entry.relative < DRAW_DISTANCE * SEGMENT_LENGTH * 0.92)
+      .sort((a, b) => b.relative - a.relative)
+      .forEach((entry) => {
+        const opponent = entry.opponent;
+        const segment = findSegment(opponent.distance + PLAYER_Z);
+        if (!game.visible.includes(segment)) return;
+        const p = segment.p1.screen;
+        if (p.y > H + 40 || p.y < 145) return;
+        const scale = clamp(p.scale * W * 0.38, 0.055, opponent.model === "monster" ? 0.48 : 0.44);
+        const x = p.x + p.w * (opponent.laneNow || opponent.lane);
+        const y = p.y - 108 * scale;
+        drawCar(ctx, x, y, scale, opponent.model, opponent.color, Math.sin(opponent.phase) * 0.18, 0);
+
+        if (scale > 0.19) {
+          ctx.save();
+          ctx.font = `700 ${Math.max(10, scale * 25)}px ui-rounded, system-ui`;
+          ctx.textAlign = "center";
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = palette.paper;
+          ctx.strokeText(opponent.name, x, y - scale * 120);
+          ctx.fillStyle = palette.ink;
+          ctx.fillText(opponent.name, x, y - scale * 120);
+          ctx.restore();
+        }
+      });
   }
 
   function drawParticles(dt) {
@@ -1970,26 +2326,69 @@ svg {
     }
   }
 
+  function awardCombo(basePoints, label, color) {
+    game.combo = Math.min(12, game.combo + 1);
+    game.comboTimer = 4.2;
+    const multiplier = 1 + Math.min(0.75, Math.floor((game.combo - 1) / 3) * 0.25);
+    const points = Math.round(basePoints * multiplier);
+    game.score += points;
+    burst(color, 12 + Math.min(game.combo, 6));
+    showToast(`${label} +${points}${game.combo > 1 ? ` · ×${game.combo}` : ""}`, true);
+    return points;
+  }
+
+  function resetCombo() {
+    game.combo = 0;
+    game.comboTimer = 0;
+  }
+
   function update(dt) {
+    if (state === "countdown") {
+      game.countdown -= dt;
+      const countdownValue = Math.max(1, Math.ceil(game.countdown));
+      ui.countdownNumber.textContent = String(countdownValue);
+      if (game.countdown <= 0) {
+        state = "playing";
+        ui.countdown.classList.add("zzr-hidden");
+        showToast("HAYDİ! 🏁", true);
+        tone(620, 0.12, "square", 0.055);
+        lastTime = performance.now();
+      }
+      updateHud();
+      return;
+    }
     if (state !== "playing") return;
+
     const playerSegment = findSegment(game.position + PLAYER_Z);
     const speedPercent = game.speed / MAX_SPEED;
     const keyboardSteer = (keys.has("ArrowLeft") || keys.has("KeyA") ? -1 : 0) + (keys.has("ArrowRight") || keys.has("KeyD") ? 1 : 0);
     const inputSteer = keyboardSteer !== 0 ? keyboardSteer : steering;
     game.playerX += inputSteer * dt * (1.35 + speedPercent * 0.85);
+    const steeringAssist = Math.abs(inputSteer) < 0.05 ? 0.78 : 0.16;
+    game.playerX -= game.playerX * dt * steeringAssist;
     game.playerX -= playerSegment.curve * dt * speedPercent * 0.24;
     game.playerX = clamp(game.playerX, -1.45, 1.45);
 
     const offroad = Math.abs(game.playerX) > 1.02;
-    const targetSpeed = offroad ? MAX_SPEED * 0.52 : MAX_SPEED;
+    const modelSpeed = settings.model === "rocket" ? 1.035 : settings.model === "monster" ? 0.965 : 1;
+    const boostSpeed = game.boostTimer > 0 ? 1.23 : 1;
+    const offroadSpeed = settings.model === "monster" ? 0.62 : 0.52;
+    const targetSpeed = offroad ? MAX_SPEED * offroadSpeed : MAX_SPEED * modelSpeed * boostSpeed;
     const acceleration = offroad ? 1.6 : 0.65;
     game.speed += (targetSpeed - game.speed) * clamp(dt * acceleration, 0, 1);
     if (game.hitCooldown > 0) game.hitCooldown -= dt;
+    game.boostTimer = Math.max(0, game.boostTimer - dt);
+    game.magnetTimer = Math.max(0, game.magnetTimer - dt);
+    if (game.comboTimer > 0) {
+      game.comboTimer = Math.max(0, game.comboTimer - dt);
+      if (game.comboTimer === 0) game.combo = 0;
+    }
     if (offroad) {
       game.offroadTimer += dt;
       if (game.offroadTimer > 1.15) {
         game.offroadTimer = 0;
         game.score = Math.max(0, game.score - 3);
+        resetCombo();
         showToast("Çimlerin gıdıklıyor! −3", false);
       }
     } else {
@@ -2002,7 +2401,15 @@ svg {
       if (game.jumpY <= 0) {
         game.jumpY = 0;
         game.jumpVelocity = 0;
-        tone(135, 0.045, "triangle", 0.05);
+        if (game.airAction && Math.abs(game.playerX) <= 1.02) {
+          game.perfectLandings += 1;
+          awardCombo(game.rampJump ? 12 : 7, "Mükemmel iniş", palette.c);
+          tone(520, 0.08, "triangle", 0.05);
+        } else {
+          tone(135, 0.045, "triangle", 0.05);
+        }
+        game.airAction = false;
+        game.rampJump = false;
       }
     }
 
@@ -2012,6 +2419,7 @@ svg {
     const previousLap = game.lap;
     game.lap = Math.floor(game.distance / trackLength);
     game.score += deltaDistance / 1350;
+    updateOpponents(dt);
 
     if (game.lap !== previousLap && game.lap < TOTAL_LAPS) {
       showToast(`${game.lap + 1}. tur! Virajlar daha da tuhaf.`, true);
@@ -2033,26 +2441,66 @@ svg {
     for (let offset = -1; offset <= 2; offset += 1) {
       const segment = segments[wrap(playerSegment.index + offset, segments.length)];
       segment.items.forEach((item) => {
-        if (item.touchedLap === game.lap || Math.abs(game.playerX - item.offset) > (item.reward ? 0.24 : 0.29)) return;
+        const rewardRange = game.magnetTimer > 0 ? 0.82 : 0.24;
+        const hitRange = item.reward ? rewardRange : item.ramp ? 0.36 : 0.29;
+        if (item.touchedLap === game.lap || Math.abs(game.playerX - item.offset) > hitRange) return;
         item.touchedLap = game.lap;
-        if (item.reward) {
-          const points = item.type === "star" ? 10 : item.type === "bolt" ? 15 : 7;
-          game.score += points;
-          burst(palette[item.type === "star" ? "c" : item.type === "bolt" ? "a" : "f"], 13);
-          showToast(`${item.type === "star" ? "Yıldız" : item.type === "bolt" ? "Şimşek" : "Halka"} +${points}`, true);
-          tone(item.type === "bolt" ? 760 : 640, 0.07, "sine", 0.05);
+        if (item.ramp) {
+          if (game.jumpY <= 4) {
+            launchJump(settings.model === "monster" ? 1080 : 1210, true);
+            game.airAction = true;
+            showToast("RAMPA! Uç bakalım!", true);
+          }
+        } else if (item.reward) {
+          if (game.jumpY > 18) game.airAction = true;
+          let basePoints = 7;
+          let label = "Halka";
+          let color = palette.f;
+
+          if (item.type === "star") {
+            basePoints = 10;
+            label = "Yıldız";
+            color = palette.c;
+          } else if (item.type === "bolt") {
+            basePoints = 13;
+            label = "TURBO";
+            color = palette.a;
+            game.boostTimer = Math.max(game.boostTimer, 2.8);
+          } else if (item.type === "shield") {
+            basePoints = 8;
+            label = "Balon kalkan";
+            color = "#8de8ff";
+            game.shield = 1;
+          } else if (item.type === "magnet") {
+            basePoints = 8;
+            label = "Mıknatıs";
+            color = palette.b;
+            game.magnetTimer = Math.max(game.magnetTimer, 5.2);
+          }
+
+          awardCombo(basePoints, label, color);
+          tone(item.type === "bolt" ? 780 : item.type === "shield" ? 560 : 640, 0.075, "sine", 0.05);
         } else if (game.jumpY > 62) {
-          game.score += 4;
-          showToast("Havadan sıyırdın! +4", true);
+          game.airAction = true;
+          awardCombo(5, "Havadan sıyırdın", palette.d);
           tone(480, 0.05, "triangle", 0.04);
+        } else if (game.shield > 0) {
+          game.shield = 0;
+          game.hitCooldown = 0.7;
+          shake = 3;
+          burst("#8de8ff", 18);
+          showToast("Kalkan kurtardı! 🫧", true);
+          tone(390, 0.1, "sine", 0.05);
         } else if (game.hitCooldown <= 0) {
-          game.score = Math.max(0, game.score - 20);
-          game.speed *= 0.48;
+          const crashPenalty = settings.model === "monster" ? 12 : 20;
+          game.score = Math.max(0, game.score - crashPenalty);
+          game.speed *= settings.model === "monster" ? 0.62 : 0.48;
           game.hitCooldown = 1.05;
+          resetCombo();
           shake = 9;
           flash = 1;
           burst(palette.b, 20);
-          showToast("PAT! −20", false);
+          showToast(`PAT! −${crashPenalty}`, false);
           tone(95, 0.12, "sawtooth", 0.075);
           if (navigator.vibrate) navigator.vibrate([35, 25, 35]);
         }
@@ -2060,18 +2508,36 @@ svg {
     }
   }
 
-  function jump() {
-    if (state !== "playing" || game.jumpY > 0) return;
-    game.jumpVelocity = settings.model === "monster" ? 890 : settings.model === "rocket" ? 1080 : 990;
+  function launchJump(velocity, fromRamp) {
+    if (state !== "playing" || game.jumpY > 0) return false;
+    game.jumpVelocity = velocity;
+    game.airAction = false;
+    game.rampJump = fromRamp;
     burst(palette.paper, 8);
-    showToast("BOING!", true);
-    tone(270, 0.065, "square", 0.04);
+    if (!fromRamp) showToast("BOING!", true);
+    tone(fromRamp ? 340 : 270, 0.065, "square", 0.04);
     if (navigator.vibrate) navigator.vibrate(18);
+    return true;
+  }
+
+  function jump() {
+    const velocity = settings.model === "monster" ? 890 : settings.model === "rocket" ? 1080 : 990;
+    launchJump(velocity, false);
   }
 
   function updateHud() {
     ui.score.textContent = String(Math.floor(game.score));
     ui.lap.textContent = `${Math.min(game.lap + 1, TOTAL_LAPS)}/${TOTAL_LAPS}`;
+    ui.rank.textContent = `${game.rank}/5`;
+    ui.combo.textContent = `KOMBO ×${game.combo}`;
+    ui.combo.classList.toggle("zzr-hidden", game.combo < 2);
+
+    const powers = [];
+    if (game.shield > 0) powers.push("🫧");
+    if (game.boostTimer > 0) powers.push("⚡");
+    if (game.magnetTimer > 0) powers.push("🧲");
+    ui.power.textContent = powers.join(" ");
+    ui.power.classList.toggle("zzr-hidden", powers.length === 0);
   }
 
   function showToast(message, positive) {
@@ -2109,22 +2575,35 @@ svg {
     palette = readPalette();
     game.distance = 0;
     game.position = 0;
-    game.speed = MAX_SPEED * 0.56;
+    game.speed = MAX_SPEED * 0.72;
     game.playerX = 0;
     game.score = 0;
     game.lap = 0;
+    game.rank = 1;
+    game.countdown = 3.15;
     game.jumpY = 0;
     game.jumpVelocity = 0;
+    game.airAction = false;
+    game.rampJump = false;
+    game.perfectLandings = 0;
+    game.combo = 0;
+    game.comboTimer = 0;
+    game.boostTimer = 0;
+    game.magnetTimer = 0;
+    game.shield = 0;
     game.hitCooldown = 0;
     game.offroadTimer = 0;
     game.particles.length = 0;
     segments.forEach((segment) => segment.items.forEach((item) => { item.touchedLap = -1; }));
     steering = 0;
     setSteering(0);
-    state = "playing";
+    resetOpponents();
+    state = "countdown";
     setScreen(null);
     ui.controls.classList.remove("zzr-hidden");
     ui.hud.classList.add("is-visible");
+    ui.countdown.classList.remove("zzr-hidden");
+    ui.countdownNumber.textContent = "3";
     updateHud();
     tone(330, 0.08, "square", 0.04);
     attemptLandscape();
@@ -2136,10 +2615,21 @@ svg {
     ui.controls.classList.add("zzr-hidden");
     ui.hud.classList.remove("is-visible");
     const final = Math.floor(game.score);
+    updateRank();
+    const place = game.rank;
+    const scoreGoal = final >= currentTrack().targetScore;
+    const landingGoal = game.perfectLandings >= 3;
+    const stars = 1 + (scoreGoal ? 1 : 0) + (landingGoal ? 1 : 0);
+    progress.trackStars[settings.track] = Math.max(progress.trackStars[settings.track] || 0, stars);
+    saveProgress();
     const previousBest = bestScore;
     bestScore = Math.max(bestScore, final);
     saveBest();
     ui.finalScore.textContent = String(final);
+    ui.finishPlace.textContent = `${place === 1 ? "🥇" : place === 2 ? "🥈" : place === 3 ? "🥉" : "🏁"} ${place}. oldun!`;
+    ui.finishStars.textContent = "★".repeat(stars) + "☆".repeat(3 - stars);
+    ui.finishStars.setAttribute("aria-label", `${stars} yıldız kazandın`);
+    ui.missionLine.textContent = `Bitir ✓ · ${currentTrack().targetScore} puan ${scoreGoal ? "✓" : "○"} · 3 mükemmel iniş ${landingGoal ? "✓" : `(${game.perfectLandings}/3)`}`;
     ui.bestLine.textContent = final > previousBest ? "Yeni rekor! Garajdaki lastikler alkışlıyor." : `En iyi puan: ${bestScore}`;
     setScreen(ui.finish);
     tone(660, 0.13, "triangle", 0.055);
@@ -2167,9 +2657,11 @@ svg {
     state = "menu";
     ui.controls.classList.add("zzr-hidden");
     ui.hud.classList.remove("is-visible");
+    ui.countdown.classList.add("zzr-hidden");
     setScreen(ui.menu);
     game.jumpY = 0;
     game.jumpVelocity = 0;
+    refreshTrackPicker();
   }
 
   async function attemptLandscape() {
@@ -2217,6 +2709,16 @@ svg {
     drawPreview();
   }
 
+  function refreshTrackPicker() {
+    root.querySelectorAll("[data-track]").forEach((button) => {
+      const selected = button.dataset.track === settings.track;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    const stars = progress.trackStars[settings.track] || 0;
+    ui.trackNote.textContent = `Hedef ${currentTrack().targetScore} · ${"★".repeat(stars)}${"☆".repeat(3 - stars)} · ${currentTrack().note}`;
+  }
+
   function render(dt) {
     ctx.save();
     if (shake > 0) ctx.translate((seeded() - 0.5) * shake, (seeded() - 0.5) * shake);
@@ -2226,6 +2728,7 @@ svg {
       game.playerX = Math.sin(performance.now() * 0.00042) * 0.14;
     }
     renderRoad();
+    if (state === "playing" || state === "countdown") drawOpponents();
     drawParticles(dt);
     drawPlayer();
     if (flash > 0) {
@@ -2266,7 +2769,7 @@ svg {
     settings.sound = soundEnabled;
     ui.sound.setAttribute("aria-pressed", String(soundEnabled));
     ui.sound.setAttribute("aria-label", soundEnabled ? "Sesi kapat" : "Sesi aç");
-    ui.sound.textContent = soundEnabled ? "Ses açık" : "Ses kapalı";
+    ui.sound.textContent = soundEnabled ? "🔊" : "🔇";
     saveSettings();
     if (soundEnabled) tone(440, 0.06, "sine", 0.04);
   });
@@ -2298,6 +2801,16 @@ svg {
     settings.color = Number(button.dataset.color);
     refreshGarage();
     tone(520 + settings.color * 40, 0.05, "sine", 0.035);
+  }));
+  root.querySelectorAll("[data-track]").forEach((button) => button.addEventListener("click", () => {
+    settings.track = TRACK_ORDER.includes(button.dataset.track) ? button.dataset.track : "neighborhood";
+    saveSettings();
+    buildTrack();
+    game.distance = 0;
+    game.position = 0;
+    refreshTrackPicker();
+    showToast(`${currentTrack().name} hazır!`, true);
+    tone(430 + TRACK_ORDER.indexOf(settings.track) * 90, 0.07, "triangle", 0.04);
   }));
 
   window.addEventListener("keydown", (event) => {
@@ -2357,8 +2870,9 @@ svg {
 
   buildTrack();
   refreshGarage();
+  refreshTrackPicker();
   ui.sound.setAttribute("aria-pressed", String(soundEnabled));
-  ui.sound.textContent = soundEnabled ? "Ses açık" : "Ses kapalı";
+  ui.sound.textContent = soundEnabled ? "🔊" : "🔇";
   requestAnimationFrame(loop);
 })();
 </script>
@@ -2376,7 +2890,7 @@ svg {
           location.reload();
         });
       }
-      navigator.serviceWorker.register("./sw.js?v=2", { updateViaCache: "none" })
+      navigator.serviceWorker.register("./sw.js?v=3", { updateViaCache: "none" })
         .then((registration) => registration.update())
         .catch(() => {
           /* Offline installation is optional; the game remains playable online. */

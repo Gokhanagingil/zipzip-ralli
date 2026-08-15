@@ -3,7 +3,7 @@
   "short_name": "ZıpZıp",
   "description": "Kıvrımlı parkurda engellerin üzerinden zıplayıp ödül topladığın eğlenceli çocuk araba oyunu.",
   "id": "./",
-  "start_url": "./?v=2",
+  "start_url": "./?v=3",
   "scope": "./",
   "display": "fullscreen",
   "orientation": "landscape",
