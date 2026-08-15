@@ -35,7 +35,7 @@ jobs:
           cp index.html manifest.webmanifest sw.js .nojekyll _site/
           cp icons/icon.svg icons/icon-192.png icons/icon-512.png _site/icons/
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
