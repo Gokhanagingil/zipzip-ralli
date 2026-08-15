@@ -868,7 +868,7 @@ svg {
         <button type="button" class="btn btn-primary btn-block" id="zzr-start">Yarışa başla</button>
         <button type="button" class="btn btn-block" id="zzr-open-garage">Garaja gir</button>
       </div>
-      <p class="text-small text-muted">Sol elinle direksiyonu çevir, sağ elinle zıpla. Engeller −20, yıldızlar +10 puan.</p>
+      <p class="text-small text-muted">Sol elinle direksiyonu çevir, sağ elinle zıpla. Duvara çarparsan durursun; üstünden atlayabilirsin.</p>
     </div>
   </section>
 
@@ -888,9 +888,12 @@ svg {
         <legend>Model</legend>
         <div class="zzr-choice-grid" id="zzr-models">
           <button type="button" class="btn zzr-choice" data-model="bubble" aria-pressed="true"><span><span aria-hidden="true">🚗</span> Pofuduk</span><small>Dengeli</small></button>
-          <button type="button" class="btn zzr-choice" data-model="rocket" aria-pressed="false"><span><span aria-hidden="true">🏎️</span> Roket</span><small>Hızlı · yüksek zıplar</small></button>
-          <button type="button" class="btn zzr-choice" data-model="monster" aria-pressed="false"><span><span aria-hidden="true">🚙</span> Mini Canavar</span><small>Çimde ve çarpışmada güçlü</small></button>
+          <button type="button" class="btn zzr-choice" data-model="rocket" aria-pressed="false"><span><span aria-hidden="true">🏎️</span> Roket</span><small>En hızlı · hassas</small></button>
+          <button type="button" class="btn zzr-choice" data-model="monster" aria-pressed="false"><span><span aria-hidden="true">🚙</span> Mini Canavar</span><small>En dayanıklı</small></button>
+          <button type="button" class="btn zzr-choice" data-model="cat" aria-pressed="false"><span><span aria-hidden="true">🐱</span> Miyav Mobil</span><small>Çevik · çabuk hızlanır</small></button>
+          <button type="button" class="btn zzr-choice" data-model="buggy" aria-pressed="false"><span><span aria-hidden="true">🏜️</span> Zıpır Buggy</span><small>En yükseğe zıplar</small></button>
         </div>
+        <p class="zzr-model-stats" id="zzr-model-stats">Hız 3/5 · Zıplama 3/5 · Direksiyon 3/5 · Güç 3/5</p>
       </fieldset>
       <fieldset class="zzr-fieldset">
         <legend>Renk</legend>
@@ -901,6 +904,7 @@ svg {
           <button type="button" class="zzr-color" data-color="3" aria-label="Yeşil" aria-pressed="false"></button>
           <button type="button" class="zzr-color" data-color="4" aria-label="Mor" aria-pressed="false"></button>
           <button type="button" class="zzr-color" data-color="5" aria-label="Turuncu" aria-pressed="false"></button>
+          <button type="button" class="zzr-color" data-color="6" aria-label="Kırmızı" aria-pressed="false"></button>
         </div>
       </fieldset>
     </div>
@@ -999,6 +1003,7 @@ svg {
     --zzr-d: #75d68a;
     --zzr-e: #9b79ec;
     --zzr-f: #ff8b45;
+    --zzr-g: #ef4444;
     position: relative;
     width: var(--zzr-viewport-width, 100vw);
     height: var(--zzr-viewport-height, 100vh);
@@ -1165,6 +1170,9 @@ svg {
     width: min(720px, 90%);
     max-height: 92%;
     overflow: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
     padding: 18px;
   }
 
@@ -1220,6 +1228,14 @@ svg {
     opacity: 0.72;
   }
 
+  #zzr-game .zzr-model-stats {
+    margin: 7px 0 0 !important;
+    color: var(--muted-foreground);
+    font-size: 11px;
+    line-height: 15px;
+    text-align: center;
+  }
+
   #zzr-game .zzr-choice[aria-pressed="true"] {
     background: var(--primary);
     color: var(--primary-foreground);
@@ -1241,6 +1257,7 @@ svg {
   #zzr-game .zzr-color:nth-child(4) { background: var(--zzr-d); }
   #zzr-game .zzr-color:nth-child(5) { background: var(--zzr-e); }
   #zzr-game .zzr-color:nth-child(6) { background: var(--zzr-f); }
+  #zzr-game .zzr-color:nth-child(7) { background: var(--zzr-g); }
   #zzr-game .zzr-color.is-selected { border-color: var(--zzr-ink); transform: scale(1.12); }
 
   #zzr-game .zzr-controls {
@@ -1473,6 +1490,7 @@ svg {
     countdown: root.querySelector("#zzr-countdown"),
     countdownNumber: root.querySelector("#zzr-countdown-number"),
     trackNote: root.querySelector("#zzr-track-note"),
+    modelStats: root.querySelector("#zzr-model-stats"),
     finalScore: root.querySelector("#zzr-final-score"),
     finishPlace: root.querySelector("#zzr-finish-place"),
     finishStars: root.querySelector("#zzr-finish-stars"),
@@ -1558,9 +1576,41 @@ svg {
   const OPPONENT_SPECS = [
     { name: "Mırmır", model: "bubble", color: "#f074b5", speed: 0.85, lane: -0.52, start: 520 },
     { name: "Tostçu", model: "monster", color: "#ff8b45", speed: 0.89, lane: 0.48, start: 180 },
-    { name: "Vınn", model: "rocket", color: "#9b79ec", speed: 0.94, lane: -0.12, start: -120 },
+    { name: "Vınn", model: "rocket", color: "#9b79ec", speed: 0.985, lane: -0.12, start: -120, challenger: true },
     { name: "Çorapçı", model: "bubble", color: "#75d68a", speed: 0.875, lane: 0.18, start: -460 }
   ];
+  const CAR_MODELS = {
+    bubble: {
+      speed: 1, offroadSpeed: 0.52, acceleration: 0.65, offroadAcceleration: 1.6,
+      steering: 1, jump: 990, rampJump: 1210, crashPenalty: 20, crashSpeed: 0.48,
+      wallPenalty: 30, wallStall: 1.2, scale: 0.48, previewScale: 0.5,
+      dims: { w: 174, h: 214, r: 62 }, stats: [3, 3, 3, 3]
+    },
+    rocket: {
+      speed: 1.055, offroadSpeed: 0.48, acceleration: 0.7, offroadAcceleration: 1.55,
+      steering: 0.96, jump: 1100, rampJump: 1280, crashPenalty: 24, crashSpeed: 0.42,
+      wallPenalty: 35, wallStall: 1.5, scale: 0.47, previewScale: 0.49,
+      dims: { w: 150, h: 230, r: 30 }, stats: [5, 4, 3, 1]
+    },
+    monster: {
+      speed: 0.965, offroadSpeed: 0.64, acceleration: 0.72, offroadAcceleration: 1.8,
+      steering: 0.88, jump: 890, rampJump: 1080, crashPenalty: 12, crashSpeed: 0.64,
+      wallPenalty: 18, wallStall: 0.65, scale: 0.52, previewScale: 0.55,
+      dims: { w: 190, h: 208, r: 35 }, stats: [2, 2, 2, 5]
+    },
+    cat: {
+      speed: 1.015, offroadSpeed: 0.54, acceleration: 0.88, offroadAcceleration: 1.7,
+      steering: 1.22, jump: 1030, rampJump: 1230, crashPenalty: 18, crashSpeed: 0.54,
+      wallPenalty: 26, wallStall: 0.9, scale: 0.48, previewScale: 0.5,
+      dims: { w: 170, h: 210, r: 46 }, stats: [4, 3, 5, 2]
+    },
+    buggy: {
+      speed: 0.99, offroadSpeed: 0.6, acceleration: 0.8, offroadAcceleration: 1.85,
+      steering: 1.08, jump: 1180, rampJump: 1370, crashPenalty: 16, crashSpeed: 0.58,
+      wallPenalty: 24, wallStall: 0.8, scale: 0.51, previewScale: 0.53,
+      dims: { w: 184, h: 202, r: 28 }, stats: [3, 5, 4, 4]
+    }
+  };
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -1579,7 +1629,8 @@ svg {
     c: "#ffd54a",
     d: "#75d68a",
     e: "#9b79ec",
-    f: "#ff8b45"
+    f: "#ff8b45",
+    g: "#ef4444"
   });
 
   function readPalette() {
@@ -1587,7 +1638,7 @@ svg {
   }
 
   let palette = readPalette();
-  const colorKeys = ["a", "b", "c", "d", "e", "f"];
+  const colorKeys = ["a", "b", "c", "d", "e", "f", "g"];
   const settings = loadSettings();
   const progress = loadProgress();
   let bestScore = readNumber("zzr-best", 0);
@@ -1645,6 +1696,7 @@ svg {
     boostTimer: 0,
     magnetTimer: 0,
     shield: 0,
+    stallTimer: 0,
     hitCooldown: 0,
     offroadTimer: 0,
     opponents: [],
@@ -1665,8 +1717,8 @@ svg {
     try {
       const parsed = JSON.parse(localStorage.getItem("zzr-settings") || "{}");
       return {
-        model: ["bubble", "rocket", "monster"].includes(parsed.model) ? parsed.model : "bubble",
-        color: clamp(Number(parsed.color) || 0, 0, 5),
+        model: Object.keys(CAR_MODELS).includes(parsed.model) ? parsed.model : "bubble",
+        color: clamp(Number(parsed.color) || 0, 0, colorKeys.length - 1),
         track: TRACK_ORDER.includes(parsed.track) ? parsed.track : "neighborhood",
         sound: parsed.sound !== false
       };
@@ -1677,6 +1729,10 @@ svg {
 
   function saveSettings() {
     try { localStorage.setItem("zzr-settings", JSON.stringify(settings)); } catch (_) { /* storage may be unavailable */ }
+  }
+
+  function currentCar() {
+    return CAR_MODELS[settings.model] || CAR_MODELS.bubble;
   }
 
   function loadProgress() {
@@ -1786,10 +1842,16 @@ svg {
           addItem(index + 2, "star", clamp(offset + (seeded() > 0.5 ? 0.34 : -0.34), -0.72, 0.72));
         }
       } else {
-        const type = ["cone", "crate", "puddle", "sock"][Math.floor(seeded() * 4)];
+        const type = ["cone", "crate", "puddle", "sock", "wall"][Math.floor(seeded() * 5)];
         addItem(index, type, offset);
       }
     }
+
+    [
+      [0.18, -0.35],
+      [0.52, 0.35],
+      [0.82, 0]
+    ].forEach((wall) => addItem(Math.floor(segments.length * wall[0]), "wall", wall[1]));
   }
 
   function findSegment(z) {
@@ -2000,8 +2062,8 @@ svg {
     if (p.y > H + 30 || p.y < 145) return;
     const scale = p.scale * W / 2;
     const x = p.x + p.w * item.offset;
-    const sizeFactor = item.ramp ? 175 : item.reward ? 115 : 150;
-    const maxSize = item.ramp ? 118 : item.reward ? 76 : 96;
+    const sizeFactor = item.ramp ? 175 : item.reward ? 115 : item.type === "wall" ? 205 : 150;
+    const maxSize = item.ramp ? 118 : item.reward ? 76 : item.type === "wall" ? 126 : 96;
     const baseSize = clamp(scale * sizeFactor, 4, maxSize);
     const bob = item.reward ? Math.sin(performance.now() * 0.005 + item.bob) * baseSize * 0.12 : 0;
     const y = p.y - baseSize * 0.35 - bob;
@@ -2093,6 +2155,33 @@ svg {
       ctx.stroke();
       ctx.fillStyle = palette.paper;
       ctx.fillRect(-size * 0.3, -size * 0.03, size * 0.6, size * 0.12);
+    } else if (type === "wall") {
+      ctx.fillStyle = palette.g;
+      ctx.fillRect(-size * 0.66, -size * 0.52, size * 1.32, size * 0.98);
+      ctx.strokeRect(-size * 0.66, -size * 0.52, size * 1.32, size * 0.98);
+      ctx.fillStyle = currentTrack().rumble;
+      ctx.fillRect(-size * 0.7, -size * 0.58, size * 1.4, size * 0.17);
+      ctx.strokeRect(-size * 0.7, -size * 0.58, size * 1.4, size * 0.17);
+      ctx.strokeStyle = palette.paper;
+      ctx.lineWidth = Math.max(1, size * 0.035);
+      [-0.2, 0.13].forEach((rowY, row) => {
+        ctx.beginPath();
+        ctx.moveTo(-size * 0.64, size * rowY);
+        ctx.lineTo(size * 0.64, size * rowY);
+        ctx.stroke();
+        const shift = row % 2 === 0 ? 0 : 0.2;
+        for (let brick = -2; brick <= 2; brick += 1) {
+          const brickX = (brick * 0.32 + shift) * size;
+          ctx.beginPath();
+          ctx.moveTo(brickX, size * (rowY - 0.3));
+          ctx.lineTo(brickX, size * rowY);
+          ctx.stroke();
+        }
+      });
+      ctx.fillStyle = palette.paper;
+      ctx.font = `800 ${Math.max(10, size * 0.27)}px ui-rounded, system-ui`;
+      ctx.textAlign = "center";
+      ctx.fillText("↑ ZIPLA", 0, size * 0.38);
     } else if (type === "cone") {
       polygon(ctx, palette.f, -size * 0.35, size * 0.45, 0, -size * 0.5, size * 0.35, size * 0.45);
       ctx.stroke();
@@ -2148,11 +2237,8 @@ svg {
     context.translate(x, y);
     const tilt = steer * 0.08;
     context.rotate(tilt);
-    const dims = model === "rocket"
-      ? { w: 150, h: 230, r: 30 }
-      : model === "monster"
-        ? { w: 190, h: 208, r: 35 }
-        : { w: 174, h: 214, r: 62 };
+    const carStyle = CAR_MODELS[model] || CAR_MODELS.bubble;
+    const dims = carStyle.dims;
     context.scale(scale, scale);
 
     context.save();
@@ -2165,14 +2251,25 @@ svg {
     context.restore();
 
     context.fillStyle = palette.ink;
-    const wheelW = model === "monster" ? 28 : 20;
-    const wheelH = model === "monster" ? 58 : 44;
+    const wheelW = model === "monster" || model === "buggy" ? 28 : model === "cat" ? 18 : 20;
+    const wheelH = model === "monster" ? 58 : model === "buggy" ? 54 : 44;
     [-1, 1].forEach((side) => {
       roundRectPath(context, side * dims.w * 0.5 - wheelW / 2, -dims.h * 0.27, wheelW, wheelH, 8);
       context.fill();
       roundRectPath(context, side * dims.w * 0.5 - wheelW / 2, dims.h * 0.18, wheelW, wheelH, 8);
       context.fill();
     });
+
+    if (model === "cat") {
+      polygon(context, color,
+        -dims.w * 0.42, -dims.h * 0.36,
+        -dims.w * 0.35, -dims.h * 0.67,
+        -dims.w * 0.05, -dims.h * 0.46);
+      polygon(context, color,
+        dims.w * 0.42, -dims.h * 0.36,
+        dims.w * 0.35, -dims.h * 0.67,
+        dims.w * 0.05, -dims.h * 0.46);
+    }
 
     context.fillStyle = color;
     context.strokeStyle = palette.ink;
@@ -2223,6 +2320,28 @@ svg {
       context.fillStyle = palette.c;
       context.fillRect(-dims.w * 0.36, dims.h * 0.34, dims.w * 0.72, 18);
       context.strokeRect(-dims.w * 0.36, dims.h * 0.34, dims.w * 0.72, 18);
+    } else if (model === "cat") {
+      context.fillStyle = palette.b;
+      polygon(context, palette.b, 0, dims.h * 0.09, -10, dims.h * 0.18, 10, dims.h * 0.18);
+      context.lineWidth = 4;
+      [-1, 1].forEach((side) => {
+        context.beginPath();
+        context.moveTo(side * dims.w * 0.12, dims.h * 0.17);
+        context.lineTo(side * dims.w * 0.39, dims.h * 0.12);
+        context.moveTo(side * dims.w * 0.12, dims.h * 0.22);
+        context.lineTo(side * dims.w * 0.4, dims.h * 0.25);
+        context.stroke();
+      });
+    } else if (model === "buggy") {
+      context.fillStyle = palette.c;
+      [-1, 1].forEach((side) => {
+        context.beginPath();
+        context.arc(side * dims.w * 0.23, -dims.h * 0.42, 13, 0, Math.PI * 2);
+        context.fill();
+        context.stroke();
+      });
+      context.fillRect(-dims.w * 0.4, dims.h * 0.34, dims.w * 0.8, 16);
+      context.strokeRect(-dims.w * 0.4, dims.h * 0.34, dims.w * 0.8, 16);
     } else {
       context.fillStyle = palette.b;
       context.beginPath();
@@ -2235,7 +2354,7 @@ svg {
   }
 
   function drawPlayer() {
-    const carScale = settings.model === "monster" ? 0.52 : 0.48;
+    const carScale = currentCar().scale;
     const lift = game.jumpY * 0.72;
     const bounce = state === "playing" || state === "countdown" ? Math.sin(game.distance * 0.012) * 2 : Math.sin(performance.now() * 0.002) * 3;
     drawCar(ctx, W / 2 + steering * 22, H - 115 - lift + bounce, carScale + game.jumpY * 0.00018, settings.model, palette[colorKeys[settings.color]], steering, game.jumpY);
@@ -2254,7 +2373,15 @@ svg {
     const difficulty = settings.track === "space" ? 1.025 : settings.track === "candy" ? 1 : 0.975;
     game.opponents.forEach((opponent) => {
       const wobble = 1 + Math.sin(game.distance * 0.000035 + opponent.phase) * 0.018;
-      opponent.distance += MAX_SPEED * opponent.speed * difficulty * wobble * dt;
+      const gap = opponent.distance - game.distance;
+      let pace = opponent.speed * difficulty * wobble;
+      if (opponent.challenger) {
+        const playerPace = game.speed / MAX_SPEED;
+        const gapCorrection = clamp((1200 - gap) / 18000, -0.38, 0.18);
+        const adaptivePace = clamp(playerPace + gapCorrection, 0.4, 1.12);
+        pace = pace * 0.32 + adaptivePace * 0.68;
+      }
+      opponent.distance += MAX_SPEED * pace * dt;
       opponent.laneNow = clamp(opponent.lane + Math.sin(opponent.distance * 0.000055 + opponent.phase) * 0.16, -0.76, 0.76);
     });
     updateRank();
@@ -2281,14 +2408,15 @@ svg {
         drawCar(ctx, x, y, scale, opponent.model, opponent.color, Math.sin(opponent.phase) * 0.18, 0);
 
         if (scale > 0.19) {
+          const opponentLabel = opponent.challenger ? `🔥 ${opponent.name}` : opponent.name;
           ctx.save();
           ctx.font = `700 ${Math.max(10, scale * 25)}px ui-rounded, system-ui`;
           ctx.textAlign = "center";
           ctx.lineWidth = 3;
           ctx.strokeStyle = palette.paper;
-          ctx.strokeText(opponent.name, x, y - scale * 120);
+          ctx.strokeText(opponentLabel, x, y - scale * 120);
           ctx.fillStyle = palette.ink;
-          ctx.fillText(opponent.name, x, y - scale * 120);
+          ctx.fillText(opponentLabel, x, y - scale * 120);
           ctx.restore();
         }
       });
@@ -2350,7 +2478,7 @@ svg {
       if (game.countdown <= 0) {
         state = "playing";
         ui.countdown.classList.add("zzr-hidden");
-        showToast("HAYDİ! 🏁", true);
+        showToast("HAYDİ! Vınn’a dikkat 🔥", true);
         tone(620, 0.12, "square", 0.055);
         lastTime = performance.now();
       }
@@ -2359,23 +2487,25 @@ svg {
     }
     if (state !== "playing") return;
 
+    const car = currentCar();
     const playerSegment = findSegment(game.position + PLAYER_Z);
     const speedPercent = game.speed / MAX_SPEED;
     const keyboardSteer = (keys.has("ArrowLeft") || keys.has("KeyA") ? -1 : 0) + (keys.has("ArrowRight") || keys.has("KeyD") ? 1 : 0);
     const inputSteer = keyboardSteer !== 0 ? keyboardSteer : steering;
-    game.playerX += inputSteer * dt * (1.35 + speedPercent * 0.85);
+    game.playerX += inputSteer * car.steering * dt * (1.35 + speedPercent * 0.85);
     const steeringAssist = Math.abs(inputSteer) < 0.05 ? 0.78 : 0.16;
     game.playerX -= game.playerX * dt * steeringAssist;
     game.playerX -= playerSegment.curve * dt * speedPercent * 0.24;
     game.playerX = clamp(game.playerX, -1.45, 1.45);
 
     const offroad = Math.abs(game.playerX) > 1.02;
-    const modelSpeed = settings.model === "rocket" ? 1.035 : settings.model === "monster" ? 0.965 : 1;
     const boostSpeed = game.boostTimer > 0 ? 1.23 : 1;
-    const offroadSpeed = settings.model === "monster" ? 0.62 : 0.52;
-    const targetSpeed = offroad ? MAX_SPEED * offroadSpeed : MAX_SPEED * modelSpeed * boostSpeed;
-    const acceleration = offroad ? 1.6 : 0.65;
-    game.speed += (targetSpeed - game.speed) * clamp(dt * acceleration, 0, 1);
+    const targetSpeed = offroad ? MAX_SPEED * car.offroadSpeed : MAX_SPEED * car.speed * boostSpeed;
+    const acceleration = offroad ? car.offroadAcceleration : car.acceleration;
+    const stalled = game.stallTimer > 0;
+    game.stallTimer = Math.max(0, game.stallTimer - dt);
+    if (stalled) game.speed = 0;
+    else game.speed += (targetSpeed - game.speed) * clamp(dt * acceleration, 0, 1);
     if (game.hitCooldown > 0) game.hitCooldown -= dt;
     game.boostTimer = Math.max(0, game.boostTimer - dt);
     game.magnetTimer = Math.max(0, game.magnetTimer - dt);
@@ -2437,17 +2567,18 @@ svg {
   }
 
   function checkItems() {
+    const car = currentCar();
     const playerSegment = findSegment(game.position + PLAYER_Z);
     for (let offset = -1; offset <= 2; offset += 1) {
       const segment = segments[wrap(playerSegment.index + offset, segments.length)];
       segment.items.forEach((item) => {
         const rewardRange = game.magnetTimer > 0 ? 0.82 : 0.24;
-        const hitRange = item.reward ? rewardRange : item.ramp ? 0.36 : 0.29;
+        const hitRange = item.reward ? rewardRange : item.ramp ? 0.36 : item.type === "wall" ? 0.42 : 0.29;
         if (item.touchedLap === game.lap || Math.abs(game.playerX - item.offset) > hitRange) return;
         item.touchedLap = game.lap;
         if (item.ramp) {
           if (game.jumpY <= 4) {
-            launchJump(settings.model === "monster" ? 1080 : 1210, true);
+            launchJump(car.rampJump, true);
             game.airAction = true;
             showToast("RAMPA! Uç bakalım!", true);
           }
@@ -2480,10 +2611,25 @@ svg {
 
           awardCombo(basePoints, label, color);
           tone(item.type === "bolt" ? 780 : item.type === "shield" ? 560 : 640, 0.075, "sine", 0.05);
-        } else if (game.jumpY > 62) {
+        } else if (game.jumpY > (item.type === "wall" ? 105 : 62)) {
           game.airAction = true;
-          awardCombo(5, "Havadan sıyırdın", palette.d);
+          awardCombo(item.type === "wall" ? 12 : 5, item.type === "wall" ? "Duvarı aştın" : "Havadan sıyırdın", palette.d);
           tone(480, 0.05, "triangle", 0.04);
+        } else if (item.type === "wall") {
+          const shielded = game.shield > 0;
+          if (shielded) game.shield = 0;
+          const wallPenalty = shielded ? 0 : car.wallPenalty;
+          game.score = Math.max(0, game.score - wallPenalty);
+          game.speed = 0;
+          game.stallTimer = car.wallStall;
+          game.hitCooldown = car.wallStall + 0.45;
+          resetCombo();
+          shake = 13;
+          flash = 1;
+          burst(palette.g, 28);
+          showToast(shielded ? "DUVAR! Kalkan puanı korudu · motor toparlanıyor" : `DUVAR! −${wallPenalty} · motor toparlanıyor`, false);
+          tone(72, 0.2, "sawtooth", 0.085);
+          if (navigator.vibrate) navigator.vibrate([70, 40, 70]);
         } else if (game.shield > 0) {
           game.shield = 0;
           game.hitCooldown = 0.7;
@@ -2492,9 +2638,9 @@ svg {
           showToast("Kalkan kurtardı! 🫧", true);
           tone(390, 0.1, "sine", 0.05);
         } else if (game.hitCooldown <= 0) {
-          const crashPenalty = settings.model === "monster" ? 12 : 20;
+          const crashPenalty = car.crashPenalty;
           game.score = Math.max(0, game.score - crashPenalty);
-          game.speed *= settings.model === "monster" ? 0.62 : 0.48;
+          game.speed *= car.crashSpeed;
           game.hitCooldown = 1.05;
           resetCombo();
           shake = 9;
@@ -2521,8 +2667,7 @@ svg {
   }
 
   function jump() {
-    const velocity = settings.model === "monster" ? 890 : settings.model === "rocket" ? 1080 : 990;
-    launchJump(velocity, false);
+    launchJump(currentCar().jump, false);
   }
 
   function updateHud() {
@@ -2534,6 +2679,7 @@ svg {
 
     const powers = [];
     if (game.shield > 0) powers.push("🫧");
+    if (game.stallTimer > 0) powers.push("🧱");
     if (game.boostTimer > 0) powers.push("⚡");
     if (game.magnetTimer > 0) powers.push("🧲");
     ui.power.textContent = powers.join(" ");
@@ -2591,6 +2737,7 @@ svg {
     game.boostTimer = 0;
     game.magnetTimer = 0;
     game.shield = 0;
+    game.stallTimer = 0;
     game.hitCooldown = 0;
     game.offroadTimer = 0;
     game.particles.length = 0;
@@ -2696,7 +2843,7 @@ svg {
       }
     }
     previewCtx.globalAlpha = 1;
-    drawCar(previewCtx, preview.width / 2, preview.height / 2 + 6, settings.model === "monster" ? 0.55 : 0.5, settings.model, palette[colorKeys[settings.color]], 0.18, 0);
+    drawCar(previewCtx, preview.width / 2, preview.height / 2 + 6, currentCar().previewScale, settings.model, palette[colorKeys[settings.color]], 0.18, 0);
   }
 
   function refreshGarage() {
@@ -2706,6 +2853,8 @@ svg {
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
     });
+    const stats = currentCar().stats;
+    ui.modelStats.textContent = `Hız ${stats[0]}/5 · Zıplama ${stats[1]}/5 · Direksiyon ${stats[2]}/5 · Güç ${stats[3]}/5`;
     drawPreview();
   }
 
@@ -2890,7 +3039,7 @@ svg {
           location.reload();
         });
       }
-      navigator.serviceWorker.register("./sw.js?v=3", { updateViaCache: "none" })
+      navigator.serviceWorker.register("./sw.js?v=4", { updateViaCache: "none" })
         .then((registration) => registration.update())
         .catch(() => {
           /* Offline installation is optional; the game remains playable online. */

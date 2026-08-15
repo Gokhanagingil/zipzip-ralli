@@ -3,7 +3,7 @@
 [![Quality checks](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/ci.yml/badge.svg)](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/ci.yml)
 [![GitHub Pages](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/deploy-pages.yml)
 
-## [Oyunu oyna →](https://gokhanagingil.github.io/zipzip-ralli/?v=3)
+## [Oyunu oyna →](https://gokhanagingil.github.io/zipzip-ralli/?v=4)
 
 10 yaş civarı çocuklar için hazırlanmış, telefon ve tablette yatay oynanan, çevrimdışı kurulabilen küçük bir PWA araba oyunudur.
 
@@ -11,12 +11,13 @@
 
 - Sol taraftaki direksiyonu sürükleyerek arabayı yönlendir.
 - Sağ taraftaki **ZIPLA!** düğmesiyle engellerin üzerinden atla.
-- Mırmır, Tostçu, Vınn ve Çorapçı'ya karşı yarış; anlık sıranı takip et.
+- Mırmır, Tostçu, Vınn ve Çorapçı'ya karşı yarış; anlık sıranı takip et. Vınn, oyuncunun temposuna uyum sağlayan baş rakiptir.
 - **Tuhaf Mahalle**, **Şeker Kanyon** veya **Uzay Otoparkı** parkurlarından birini seç.
 - Rampalardan uç; mükemmel inişlerle kombo yap.
+- Tuğla duvarların üzerinden zıpla. Yerde çarparsan araba tamamen durur ve yeniden hızlanması zaman alır.
 - Yıldız, halka, turbo, balon kalkan ve mıknatısları topla.
 - Koni, kasa, su birikintisi ve gizemli çorap puan kaybettirir.
-- Garajdan üç farklı sürüş karakterine sahip model ve altı renk seçilebilir.
+- Garajdan beş farklı sürüş karakterine sahip model ve kırmızı dahil yedi renk seçilebilir.
 - Her parkurda üç görev yıldızı kazan; sonuçların cihazda saklanır.
 - Klavyede `A/D` veya ok tuşları yön verir; `Space` zıplatır; `Esc` duraklatır.
 
