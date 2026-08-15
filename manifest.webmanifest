@@ -1,9 +1,9 @@
 {
   "name": "ZıpZıp Ralli",
   "short_name": "ZıpZıp",
-  "description": "Kıvrımlı parkurda engellerin üzerinden zıplayıp ödül topladığın eğlenceli çocuk araba oyunu.",
+  "description": "Duvar ve çukurların üzerinden zıplayıp para topladığın, arabanı aksesuarlarla süslediğin eğlenceli çocuk araba oyunu.",
   "id": "./",
-  "start_url": "./?v=5",
+  "start_url": "./?v=6",
   "scope": "./",
   "display": "fullscreen",
   "orientation": "landscape",

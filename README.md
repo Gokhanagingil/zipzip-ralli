@@ -3,7 +3,7 @@
 [![Quality checks](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/ci.yml/badge.svg)](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/ci.yml)
 [![GitHub Pages](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/deploy-pages.yml)
 
-## [Oyunu oyna →](https://gokhanagingil.github.io/zipzip-ralli/?v=5)
+## [Oyunu oyna →](https://gokhanagingil.github.io/zipzip-ralli/?v=6)
 
 10 yaş civarı çocuklar için hazırlanmış, telefon ve tablette yatay oynanan, çevrimdışı kurulabilen küçük bir PWA araba oyunudur.
 
@@ -16,10 +16,12 @@
 - Mırmır, Tostçu, Vınn ve Çorapçı'ya karşı yarış; anlık sıranı takip et. Vınn, oyuncunun temposuna uyum sağlayan baş rakiptir.
 - **Tuhaf Mahalle**, **Şeker Kanyon** veya **Uzay Otoparkı** parkurlarından birini seç.
 - Rampalardan uç; mükemmel inişlerle kombo yap.
-- Tuğla duvarların üzerinden zıpla. Yerde çarparsan araba tamamen durur ve yeniden hızlanması zaman alır.
-- Yıldız, halka, balon kalkan ve mıknatısları topla. Mavi şimşek yaklaşık dört saniyelik **Turbo Modu** başlatır; kalan süre HUD’da görünür.
-- Koni, kasa, su birikintisi ve gizemli çorap puan kaybettirir.
-- Garajdan beş farklı sürüş karakterine sahip model ve kırmızı dahil yedi renk seçilebilir.
+- Geniş tuğla duvarların üzerinden zıpla. Yerde çarparsan araba tamamen durur ve yeniden hızlanması zaman alır.
+- Yolun tamamını kaplayan çukurları zıplayarak aş. İçine düşersen para kaybedip 18 yol dilimi geriden devam edersin.
+- Para, yıldız, balon kalkan ve mıknatısları topla. Mavi şimşek yaklaşık dört saniyelik **Turbo Modu** başlatır; kalan süre HUD’da görünür.
+- Koni, kasa, su birikintisi ve gizemli çorap para kaybettirir.
+- Yarış kazancı cihazdaki kalıcı cüzdana eklenir; yeni oyuncuya bir defalık 250 başlangıç parası verilir.
+- Garajdan beş farklı sürüş karakterine sahip model, kırmızı dahil yedi renk ve satın alınıp takılabilen 12 aksesuar seçilebilir.
 - Her parkurda üç görev yıldızı kazan; sonuçların cihazda saklanır.
 - Klavyede `A/D` veya ok tuşları yön verir; `Space` zıplatır; `Esc` duraklatır.
 

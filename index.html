@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <title>ZıpZıp Ralli</title>
-<meta name="description" content="Kıvrımlı parkurda engellerin üzerinden zıplayıp ödül topladığın eğlenceli çocuk araba oyunu.">
+<meta name="description" content="Duvar ve çukurların üzerinden zıplayıp para topladığın, arabanı aksesuarlarla süslediğin eğlenceli çocuk araba oyunu.">
 <meta name="theme-color" content="#49a7ff">
 <meta name="application-name" content="ZıpZıp Ralli">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -830,11 +830,11 @@ svg {
 </head>
 <body>
 <div id="zzr-game" role="application" aria-label="ZıpZıp Ralli araba oyunu">
-  <canvas id="zzr-canvas" width="1280" height="720" role="img" aria-label="Kıvrımlı bir parkurda engellerin üzerinden zıplayıp yıldız toplanan renkli araba oyunu"></canvas>
+  <canvas id="zzr-canvas" width="1280" height="720" role="img" aria-label="Kıvrımlı bir parkurda duvar ve çukurların üzerinden zıplayıp para toplanan renkli araba oyunu"></canvas>
 
   <div class="zzr-hud" id="zzr-hud" aria-live="polite">
     <div class="zzr-score-group">
-      <span class="viz-badge">PUAN <strong id="zzr-score">0</strong></span>
+      <span class="viz-badge">PARA 🪙 <strong id="zzr-score">0</strong></span>
       <span class="viz-badge">TUR <strong id="zzr-lap">1/2</strong></span>
       <span class="viz-badge" id="zzr-rank-badge">SIRA <strong id="zzr-rank">1/5</strong></span>
       <span class="viz-badge zzr-mode-badge" id="zzr-mode-badge">🏁 TEK</span>
@@ -860,6 +860,7 @@ svg {
       <div class="zzr-sticker" aria-hidden="true">BOING!</div>
       <h2 id="zzr-title">ZıpZıp Ralli</h2>
       <p id="zzr-tagline">Bugün yerçekimi biraz izinli.</p>
+      <p class="zzr-wallet-pill">CÜZDAN 🪙 <strong id="zzr-wallet-menu">250</strong></p>
       <div class="zzr-mode-grid" id="zzr-modes" aria-label="Oyun modu seç">
         <button type="button" class="btn zzr-mode is-selected" data-mode="solo" aria-pressed="true"><span aria-hidden="true">🏁</span> Tek</button>
         <button type="button" class="btn zzr-mode" data-mode="coop" aria-pressed="false"><span aria-hidden="true">🤝</span> Pilot + Zıplatıcı</button>
@@ -875,7 +876,7 @@ svg {
         <button type="button" class="btn btn-primary btn-block" id="zzr-start">Yarışa başla</button>
         <button type="button" class="btn btn-block" id="zzr-open-garage">Garaja gir</button>
       </div>
-      <p class="text-small text-muted">Sol elinle direksiyonu çevir, sağ elinle zıpla. Duvarı aş; mavi şimşeği kapıp Turbo Modu’na geç.</p>
+      <p class="text-small text-muted">Duvar ve tam yol çukurlarını aş; para topla, aksesuar al ve mavi şimşekle Turbo Modu’na geç.</p>
     </div>
   </section>
 
@@ -899,9 +900,12 @@ svg {
       <div class="zzr-garage-head">
         <div>
           <h3 id="zzr-garage-title">Tuhaf Garaj</h3>
-          <p class="text-small text-muted">Arabanın huyunu ve rengini seç.</p>
+          <p class="text-small text-muted">Arabanı seç, paranla aksesuar al.</p>
         </div>
-        <button type="button" class="btn btn-ghost" id="zzr-close-garage">Bitti</button>
+        <div class="zzr-garage-tools">
+          <span class="viz-badge">🪙 <strong id="zzr-wallet-garage">250</strong></span>
+          <button type="button" class="btn btn-ghost" id="zzr-close-garage">Bitti</button>
+        </div>
       </div>
       <div class="zzr-garage-preview" aria-label="Seçili arabanın ön izlemesi">
         <canvas id="zzr-preview" width="360" height="180"></canvas>
@@ -909,10 +913,10 @@ svg {
       <fieldset class="zzr-fieldset">
         <legend>Model</legend>
         <div class="zzr-choice-grid" id="zzr-models">
-          <button type="button" class="btn zzr-choice" data-model="bubble" aria-pressed="true"><span><span aria-hidden="true">🚗</span> Pofuduk</span><small>Dengeli</small></button>
+          <button type="button" class="btn zzr-choice" data-model="bubble" aria-pressed="true"><span><span aria-hidden="true">🚗</span> Yağmur</span><small>Dengeli</small></button>
           <button type="button" class="btn zzr-choice" data-model="rocket" aria-pressed="false"><span><span aria-hidden="true">🏎️</span> Roket</span><small>En hızlı · hassas</small></button>
           <button type="button" class="btn zzr-choice" data-model="monster" aria-pressed="false"><span><span aria-hidden="true">🚙</span> Mini Canavar</span><small>En dayanıklı</small></button>
-          <button type="button" class="btn zzr-choice" data-model="cat" aria-pressed="false"><span><span aria-hidden="true">🐱</span> Miyav Mobil</span><small>Çevik · çabuk hızlanır</small></button>
+          <button type="button" class="btn zzr-choice" data-model="cat" aria-pressed="false"><span><span aria-hidden="true">🐱</span> ZıpZıp Taner</span><small>Çevik · çabuk hızlanır</small></button>
           <button type="button" class="btn zzr-choice" data-model="buggy" aria-pressed="false"><span><span aria-hidden="true">🏜️</span> Zıpır Buggy</span><small>En yükseğe zıplar</small></button>
         </div>
         <p class="zzr-model-stats" id="zzr-model-stats">Hız 3/5 · Zıplama 3/5 · Direksiyon 3/5 · Güç 3/5</p>
@@ -927,6 +931,25 @@ svg {
           <button type="button" class="zzr-color" data-color="4" aria-label="Mor" aria-pressed="false"></button>
           <button type="button" class="zzr-color" data-color="5" aria-label="Turuncu" aria-pressed="false"></button>
           <button type="button" class="zzr-color" data-color="6" aria-label="Kırmızı" aria-pressed="false"></button>
+        </div>
+      </fieldset>
+      <fieldset class="zzr-fieldset">
+        <legend>Aksesuar mağazası</legend>
+        <p class="zzr-shop-note">Satın aldığın aksesuar sende kalır. Takmak için tekrar dokun.</p>
+        <div class="zzr-accessory-grid" id="zzr-accessories">
+          <button type="button" class="btn zzr-accessory is-selected" data-accessory="none" aria-pressed="true"><span>🚫 Sade</span><small>Takılı</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="cap" aria-pressed="false"><span>🧢 Kırmızı Şapka</span><small>🪙 180</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="topHat" aria-pressed="false"><span>🎩 Silindir</span><small>🪙 320</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="crown" aria-pressed="false"><span>👑 Taç</span><small>🪙 650</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="sunHat" aria-pressed="false"><span>👒 Güneş Şapkası</span><small>🪙 280</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="party" aria-pressed="false"><span>🎉 Parti Tacı</span><small>🪙 220</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="bow" aria-pressed="false"><span>🎀 Fiyonk</span><small>🪙 160</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="shades" aria-pressed="false"><span>🕶️ Gözlük</span><small>🪙 260</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="cat" aria-pressed="false"><span>🐱 Kedi Kulakları</span><small>🪙 360</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="bunny" aria-pressed="false"><span>🐰 Tavşan Kulakları</span><small>🪙 380</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="rocketCharm" aria-pressed="false"><span>🚀 Roket Süsü</span><small>🪙 480</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="starAntenna" aria-pressed="false"><span>⭐ Yıldız Anten</span><small>🪙 420</small></button>
+          <button type="button" class="btn zzr-accessory" data-accessory="pirate" aria-pressed="false"><span>🏴‍☠️ Korsan Bayrağı</span><small>🪙 560</small></button>
         </div>
       </fieldset>
     </div>
@@ -948,7 +971,7 @@ svg {
       <div class="zzr-sticker" aria-hidden="true">VİYUUU!</div>
       <h3 id="zzr-finish-title">Parkur tamam!</h3>
       <p class="zzr-finish-place" id="zzr-finish-place">🥇 1. oldun!</p>
-      <p id="zzr-final-score-line">Toplam puan: <strong id="zzr-final-score">0</strong></p>
+      <p id="zzr-final-score-line">Toplanan para: 🪙 <strong id="zzr-final-score">0</strong></p>
       <p class="zzr-finish-stars" id="zzr-finish-stars" aria-label="Kazanılan yıldızlar">☆☆☆</p>
       <div class="zzr-duel-summary zzr-hidden" id="zzr-duel-summary" aria-label="Düello sonuçları"></div>
       <p class="text-small" id="zzr-mission-line"></p>
@@ -1152,6 +1175,21 @@ svg {
     border-radius: 12px 5px 14px 6px;
   }
 
+  #zzr-game .zzr-wallet-pill {
+    position: absolute;
+    top: -13px;
+    left: -13px;
+    margin: 0 !important;
+    padding: 6px 10px;
+    border: 2px solid var(--zzr-ink);
+    border-radius: 12px 7px 13px 8px;
+    background: var(--zzr-c);
+    color: var(--zzr-ink);
+    font-size: 11px;
+    line-height: 15px;
+    transform: rotate(-3deg);
+  }
+
   #zzr-game .zzr-menu-actions {
     display: grid;
     gap: 10px;
@@ -1233,6 +1271,7 @@ svg {
   }
 
   #zzr-game .zzr-garage-head p { margin: 0; }
+  #zzr-game .zzr-garage-tools { display: flex; align-items: center; gap: 8px; }
 
   #zzr-game .zzr-garage-preview {
     height: 128px;
@@ -1307,6 +1346,37 @@ svg {
   #zzr-game .zzr-color:nth-child(6) { background: var(--zzr-f); }
   #zzr-game .zzr-color:nth-child(7) { background: var(--zzr-g); }
   #zzr-game .zzr-color.is-selected { border-color: var(--zzr-ink); transform: scale(1.12); }
+
+  #zzr-game .zzr-shop-note {
+    margin: -3px 0 8px !important;
+    color: var(--muted-foreground);
+    font-size: 10px;
+    line-height: 14px;
+  }
+  #zzr-game .zzr-accessory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7px;
+  }
+  #zzr-game .zzr-accessory {
+    min-width: 0;
+    min-height: 52px;
+    padding: 5px;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+    white-space: normal;
+    font-size: 10px;
+    line-height: 12px;
+  }
+  #zzr-game .zzr-accessory small { font-size: 9px; line-height: 11px; opacity: 0.75; }
+  #zzr-game .zzr-accessory.is-owned { border-color: var(--zzr-d); }
+  #zzr-game .zzr-accessory.is-selected {
+    border-color: var(--zzr-ink);
+    background: var(--zzr-c);
+    color: var(--zzr-ink);
+    box-shadow: inset 0 0 0 1px var(--zzr-ink);
+  }
 
   #zzr-game .zzr-controls {
     position: absolute;
@@ -1486,6 +1556,7 @@ svg {
     #zzr-game .zzr-hud-actions .btn { padding-inline: 8px; }
     #zzr-game .zzr-controls { top: auto; right: 10px; bottom: 7px; left: 10px; }
     #zzr-game .zzr-choice-grid { gap: 5px; }
+    #zzr-game .zzr-accessory-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
   }
 
   @media (orientation: landscape) and (max-height: 520px) {
@@ -1575,6 +1646,8 @@ svg {
     countdownInstruction: root.querySelector("#zzr-countdown-instruction"),
     tagline: root.querySelector("#zzr-tagline"),
     start: root.querySelector("#zzr-start"),
+    walletMenu: root.querySelector("#zzr-wallet-menu"),
+    walletGarage: root.querySelector("#zzr-wallet-garage"),
     trackNote: root.querySelector("#zzr-track-note"),
     modelStats: root.querySelector("#zzr-model-stats"),
     finalScore: root.querySelector("#zzr-final-score"),
@@ -1676,7 +1749,7 @@ svg {
   ];
   const CAR_MODELS = {
     bubble: {
-      label: "Pofuduk",
+      label: "Yağmur",
       speed: 1, offroadSpeed: 0.52, acceleration: 0.65, offroadAcceleration: 1.6,
       steering: 1, jump: 990, rampJump: 1210, crashPenalty: 20, crashSpeed: 0.48,
       wallPenalty: 30, wallStall: 1.2, scale: 0.48, previewScale: 0.5,
@@ -1697,7 +1770,7 @@ svg {
       dims: { w: 190, h: 208, r: 35 }, stats: [2, 2, 2, 5]
     },
     cat: {
-      label: "Miyav Mobil",
+      label: "ZıpZıp Taner",
       speed: 1.015, offroadSpeed: 0.54, acceleration: 0.88, offroadAcceleration: 1.7,
       steering: 1.22, jump: 1030, rampJump: 1230, crashPenalty: 18, crashSpeed: 0.54,
       wallPenalty: 26, wallStall: 0.9, scale: 0.48, previewScale: 0.5,
@@ -1711,6 +1784,22 @@ svg {
       dims: { w: 184, h: 202, r: 28 }, stats: [3, 5, 4, 4]
     }
   };
+  const ACCESSORIES = {
+    none: { label: "Sade", icon: "", price: 0, y: -0.42, scale: 1 },
+    cap: { label: "Kırmızı Şapka", icon: "🧢", price: 180, y: -0.43, scale: 0.42 },
+    topHat: { label: "Silindir", icon: "🎩", price: 320, y: -0.44, scale: 0.44 },
+    crown: { label: "Taç", icon: "👑", price: 650, y: -0.45, scale: 0.42 },
+    sunHat: { label: "Güneş Şapkası", icon: "👒", price: 280, y: -0.43, scale: 0.43 },
+    party: { label: "Parti Tacı", icon: "🎉", price: 220, y: -0.44, scale: 0.38 },
+    bow: { label: "Fiyonk", icon: "🎀", price: 160, y: -0.42, scale: 0.36 },
+    shades: { label: "Gözlük", icon: "🕶️", price: 260, y: -0.17, scale: 0.34 },
+    cat: { label: "Kedi Kulakları", icon: "🐱", price: 360, y: -0.43, scale: 0.39 },
+    bunny: { label: "Tavşan Kulakları", icon: "🐰", price: 380, y: -0.46, scale: 0.4 },
+    rocketCharm: { label: "Roket Süsü", icon: "🚀", price: 480, y: -0.43, scale: 0.35 },
+    starAntenna: { label: "Yıldız Anten", icon: "⭐", price: 420, y: -0.48, scale: 0.31 },
+    pirate: { label: "Korsan Bayrağı", icon: "🏴‍☠️", price: 560, y: -0.43, scale: 0.38 }
+  };
+  const ACCESSORY_ORDER = Object.keys(ACCESSORIES);
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const lerp = (a, b, t) => a + (b - a) * t;
@@ -1742,6 +1831,7 @@ svg {
   const colorLabels = ["Mavi", "Pembe", "Sarı", "Yeşil", "Mor", "Turuncu", "Kırmızı"];
   const settings = loadSettings();
   const progress = loadProgress();
+  const economy = loadEconomy();
   let bestScore = readNumber("zzr-best", 0);
   let audioContext = null;
   let soundEnabled = settings.sound !== false;
@@ -1799,10 +1889,12 @@ svg {
     magnetTimer: 0,
     shield: 0,
     stallTimer: 0,
+    pitRecoveryTimer: 0,
     hitCooldown: 0,
     offroadTimer: 0,
     raceTime: 0,
     wallHits: 0,
+    pitFalls: 0,
     opponents: [],
     particles: [],
     visible: []
@@ -1857,12 +1949,13 @@ svg {
   }
 
   function carSnapshot() {
-    return { model: settings.model, color: settings.color };
+    return { model: settings.model, color: settings.color, accessory: economy.equipped };
   }
 
   function carDescription(car) {
     const model = CAR_MODELS[car.model] || CAR_MODELS.bubble;
-    return `${model.label} · ${colorLabels[car.color] || colorLabels[0]}`;
+    const accessory = ACCESSORIES[car.accessory] || ACCESSORIES.none;
+    return `${model.label} · ${colorLabels[car.color] || colorLabels[0]}${car.accessory && car.accessory !== "none" ? ` · ${accessory.label}` : ""}`;
   }
 
   function formatTime(seconds) {
@@ -1887,6 +1980,32 @@ svg {
 
   function saveProgress() {
     try { localStorage.setItem("zzr-progress", JSON.stringify(progress)); } catch (_) { /* storage may be unavailable */ }
+  }
+
+  function loadEconomy() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem("zzr-economy") || "{}");
+      const savedWallet = Number(parsed.wallet);
+      const wallet = Number.isFinite(savedWallet) && savedWallet >= 0 ? Math.floor(savedWallet) : 250;
+      const savedOwned = Array.isArray(parsed.owned) ? parsed.owned.filter((id) => ACCESSORY_ORDER.includes(id)) : [];
+      const owned = ["none"].concat(savedOwned.filter((id) => id !== "none"));
+      const equipped = owned.includes(parsed.equipped) ? parsed.equipped : "none";
+      return { wallet, owned, equipped };
+    } catch (_) {
+      return { wallet: 250, owned: ["none"], equipped: "none" };
+    }
+  }
+
+  function saveEconomy() {
+    try { localStorage.setItem("zzr-economy", JSON.stringify(economy)); } catch (_) { /* storage may be unavailable */ }
+  }
+
+  function creditMoney(amount) {
+    const earned = Math.max(0, Math.floor(amount));
+    economy.wallet += earned;
+    saveEconomy();
+    refreshWallet();
+    return earned;
   }
 
   function currentTrack() {
@@ -1959,7 +2078,7 @@ svg {
       if (roll < rampChance) {
         addItem(index, "ramp", offset);
         [2, 4, 6].forEach((ahead, trailIndex) => {
-          addItem(index + ahead, trailIndex === 1 ? "coin" : "star", offset);
+          addItem(index + ahead, trailIndex === 2 ? "star" : "coin", offset);
         });
         index += 6;
         continue;
@@ -1967,8 +2086,8 @@ svg {
 
       if (roll < 0.69) {
         const rewardRoll = seeded();
-        const type = rewardRoll < 0.42 ? "star"
-          : rewardRoll < 0.64 ? "coin"
+        const type = rewardRoll < 0.48 ? "coin"
+          : rewardRoll < 0.64 ? "star"
             : rewardRoll < 0.78 ? "bolt"
               : rewardRoll < 0.89 ? "shield" : "magnet";
         addItem(index, type, offset);
@@ -1986,6 +2105,15 @@ svg {
       [0.52, 0.35],
       [0.82, 0]
     ].forEach((wall) => addItem(Math.floor(segments.length * wall[0]), "wall", wall[1]));
+
+    [0.31, 0.68, 0.91].forEach((fraction) => {
+      const pitIndex = Math.floor(segments.length * fraction);
+      for (let clear = -3; clear <= 3; clear += 1) {
+        const segment = segments[pitIndex + clear];
+        if (segment) segment.items.length = 0;
+      }
+      addItem(pitIndex, "pit", 0);
+    });
   }
 
   function findSegment(z) {
@@ -2194,10 +2322,14 @@ svg {
   function drawItem(item, segment) {
     const p = segment.p1.screen;
     if (p.y > H + 30 || p.y < 145) return;
+    if (item.type === "pit") {
+      drawPit(segment);
+      return;
+    }
     const scale = p.scale * W / 2;
     const x = p.x + p.w * item.offset;
-    const sizeFactor = item.ramp ? 175 : item.reward ? 115 : item.type === "wall" ? 205 : 150;
-    const maxSize = item.ramp ? 118 : item.reward ? 76 : item.type === "wall" ? 126 : 96;
+    const sizeFactor = item.ramp ? 175 : item.reward ? 115 : item.type === "wall" ? 225 : 150;
+    const maxSize = item.ramp ? 118 : item.reward ? 76 : item.type === "wall" ? 138 : 96;
     const baseSize = clamp(scale * sizeFactor, 4, maxSize);
     const bob = item.reward ? Math.sin(performance.now() * 0.005 + item.bob) * baseSize * 0.12 : 0;
     const y = p.y - baseSize * 0.35 - bob;
@@ -2205,6 +2337,54 @@ svg {
     ctx.translate(x, y);
     if (item.reward) drawReward(item.type, baseSize);
     else drawObstacle(item.type, baseSize);
+    ctx.restore();
+  }
+
+  function drawPit(segment) {
+    const p = segment.p1.screen;
+    const halfWidth = Math.min(p.w * 1.03, W * 1.35);
+    const depth = clamp(p.w * 0.2, 7, 82);
+    const y = p.y - depth * 0.18;
+    ctx.save();
+    ctx.translate(p.x, y);
+
+    ctx.fillStyle = "#2a203d";
+    ctx.strokeStyle = palette.ink;
+    ctx.lineWidth = Math.max(2, depth * 0.08);
+    ctx.beginPath();
+    ctx.moveTo(-halfWidth, depth * 0.2);
+    ctx.lineTo(-halfWidth * 0.92, -depth * 0.62);
+    ctx.lineTo(-halfWidth * 0.7, -depth * 0.48);
+    ctx.lineTo(-halfWidth * 0.48, -depth * 0.72);
+    ctx.lineTo(-halfWidth * 0.22, -depth * 0.52);
+    ctx.lineTo(0, -depth * 0.76);
+    ctx.lineTo(halfWidth * 0.22, -depth * 0.5);
+    ctx.lineTo(halfWidth * 0.5, -depth * 0.7);
+    ctx.lineTo(halfWidth * 0.72, -depth * 0.5);
+    ctx.lineTo(halfWidth, -depth * 0.68);
+    ctx.lineTo(halfWidth, depth * 0.2);
+    ctx.lineTo(halfWidth * 0.72, depth * 0.42);
+    ctx.lineTo(halfWidth * 0.42, depth * 0.24);
+    ctx.lineTo(halfWidth * 0.12, depth * 0.48);
+    ctx.lineTo(-halfWidth * 0.18, depth * 0.26);
+    ctx.lineTo(-halfWidth * 0.48, depth * 0.46);
+    ctx.lineTo(-halfWidth * 0.75, depth * 0.25);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.52;
+    ctx.fillStyle = palette.e;
+    ctx.beginPath();
+    ctx.ellipse(0, depth * 0.02, halfWidth * 0.78, depth * 0.34, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    if (depth > 24) {
+      ctx.fillStyle = palette.paper;
+      ctx.font = `800 ${Math.max(10, depth * 0.26)}px ui-rounded, system-ui`;
+      ctx.textAlign = "center";
+      ctx.fillText("↑ ZIPLA!  ·  ÇUKUR", 0, depth * 0.1);
+    }
     ctx.restore();
   }
 
@@ -2267,7 +2447,11 @@ svg {
     ctx.fillStyle = palette.ink;
     ctx.font = `500 ${Math.max(7, size * 0.24)}px ui-rounded, system-ui`;
     ctx.textAlign = "center";
-    if (type === "star" || type === "coin") ctx.fillText("•ᴗ•", 0, size * 0.09);
+    if (type === "star") ctx.fillText("•ᴗ•", 0, size * 0.09);
+    else if (type === "coin") {
+      ctx.font = `800 ${Math.max(9, size * 0.42)}px ui-rounded, system-ui`;
+      ctx.fillText("₺", 0, size * 0.14);
+    }
   }
 
   function drawObstacle(type, size) {
@@ -2291,20 +2475,20 @@ svg {
       ctx.fillRect(-size * 0.3, -size * 0.03, size * 0.6, size * 0.12);
     } else if (type === "wall") {
       ctx.fillStyle = palette.g;
-      ctx.fillRect(-size * 0.66, -size * 0.52, size * 1.32, size * 0.98);
-      ctx.strokeRect(-size * 0.66, -size * 0.52, size * 1.32, size * 0.98);
+      ctx.fillRect(-size * 0.92, -size * 0.52, size * 1.84, size * 0.98);
+      ctx.strokeRect(-size * 0.92, -size * 0.52, size * 1.84, size * 0.98);
       ctx.fillStyle = currentTrack().rumble;
-      ctx.fillRect(-size * 0.7, -size * 0.58, size * 1.4, size * 0.17);
-      ctx.strokeRect(-size * 0.7, -size * 0.58, size * 1.4, size * 0.17);
+      ctx.fillRect(-size * 0.97, -size * 0.58, size * 1.94, size * 0.17);
+      ctx.strokeRect(-size * 0.97, -size * 0.58, size * 1.94, size * 0.17);
       ctx.strokeStyle = palette.paper;
       ctx.lineWidth = Math.max(1, size * 0.035);
       [-0.2, 0.13].forEach((rowY, row) => {
         ctx.beginPath();
-        ctx.moveTo(-size * 0.64, size * rowY);
-        ctx.lineTo(size * 0.64, size * rowY);
+        ctx.moveTo(-size * 0.9, size * rowY);
+        ctx.lineTo(size * 0.9, size * rowY);
         ctx.stroke();
         const shift = row % 2 === 0 ? 0 : 0.2;
-        for (let brick = -2; brick <= 2; brick += 1) {
+        for (let brick = -3; brick <= 3; brick += 1) {
           const brickX = (brick * 0.32 + shift) * size;
           ctx.beginPath();
           ctx.moveTo(brickX, size * (rowY - 0.3));
@@ -2366,7 +2550,176 @@ svg {
     context.closePath();
   }
 
-  function drawCar(context, x, y, scale, model, color, steer, airborne) {
+  function drawAccessory(context, dims, accessoryId) {
+    const accessory = ACCESSORIES[accessoryId] || ACCESSORIES.none;
+    if (!accessory.icon) return;
+    const size = dims.w * accessory.scale;
+    const y = dims.h * accessory.y;
+    context.save();
+    context.strokeStyle = palette.ink;
+    context.lineWidth = Math.max(4, size * 0.08);
+    context.lineJoin = "round";
+    context.lineCap = "round";
+
+    if (accessoryId === "cap") {
+      context.fillStyle = palette.g;
+      context.beginPath();
+      context.arc(0, y, size * 0.42, Math.PI, Math.PI * 2);
+      context.lineTo(size * 0.42, y + size * 0.08);
+      context.lineTo(-size * 0.42, y + size * 0.08);
+      context.closePath();
+      context.fill();
+      context.stroke();
+      context.fillRect(-size * 0.06, y + size * 0.02, size * 0.62, size * 0.13);
+      context.strokeRect(-size * 0.06, y + size * 0.02, size * 0.62, size * 0.13);
+    } else if (accessoryId === "topHat") {
+      context.fillStyle = palette.ink;
+      roundRectPath(context, -size * 0.34, y - size * 0.55, size * 0.68, size * 0.62, size * 0.08);
+      context.fill();
+      context.fillRect(-size * 0.52, y, size * 1.04, size * 0.17);
+      context.fillStyle = palette.b;
+      context.fillRect(-size * 0.34, y - size * 0.03, size * 0.68, size * 0.13);
+    } else if (accessoryId === "crown") {
+      polygon(context, palette.c,
+        -size * 0.5, y + size * 0.25,
+        -size * 0.46, y - size * 0.36,
+        -size * 0.16, y - size * 0.08,
+        0, y - size * 0.5,
+        size * 0.18, y - size * 0.08,
+        size * 0.48, y - size * 0.38,
+        size * 0.5, y + size * 0.25);
+      context.stroke();
+      context.fillStyle = palette.b;
+      context.fillRect(-size * 0.48, y + size * 0.12, size * 0.96, size * 0.16);
+      context.strokeRect(-size * 0.48, y + size * 0.12, size * 0.96, size * 0.16);
+    } else if (accessoryId === "sunHat") {
+      context.fillStyle = palette.c;
+      context.beginPath();
+      context.ellipse(0, y + size * 0.08, size * 0.58, size * 0.2, 0, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+      context.beginPath();
+      context.arc(0, y, size * 0.32, Math.PI, Math.PI * 2);
+      context.fill();
+      context.stroke();
+      context.strokeStyle = palette.b;
+      context.beginPath();
+      context.arc(0, y, size * 0.32, Math.PI, Math.PI * 2);
+      context.stroke();
+    } else if (accessoryId === "party") {
+      polygon(context, palette.e, -size * 0.42, y + size * 0.28, 0, y - size * 0.58, size * 0.42, y + size * 0.28);
+      context.stroke();
+      context.fillStyle = palette.c;
+      [-0.18, 0.12].forEach((dot, index) => {
+        context.beginPath();
+        context.arc(dot * size, y + (index ? -0.05 : -0.22) * size, size * 0.07, 0, Math.PI * 2);
+        context.fill();
+      });
+      context.fillStyle = palette.b;
+      context.beginPath();
+      context.arc(0, y - size * 0.62, size * 0.12, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+    } else if (accessoryId === "bow") {
+      context.fillStyle = palette.b;
+      [-1, 1].forEach((side) => {
+        context.beginPath();
+        context.ellipse(side * size * 0.28, y, size * 0.3, size * 0.2, side * 0.35, 0, Math.PI * 2);
+        context.fill();
+        context.stroke();
+      });
+      context.beginPath();
+      context.arc(0, y, size * 0.14, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+    } else if (accessoryId === "shades") {
+      context.fillStyle = palette.ink;
+      [-1, 1].forEach((side) => {
+        roundRectPath(context, side * size * 0.28 - size * 0.2, y - size * 0.13, size * 0.4, size * 0.28, size * 0.08);
+        context.fill();
+      });
+      context.beginPath();
+      context.moveTo(-size * 0.08, y);
+      context.lineTo(size * 0.08, y);
+      context.stroke();
+    } else if (accessoryId === "cat") {
+      polygon(context, palette.b, -size * 0.5, y + size * 0.22, -size * 0.42, y - size * 0.45, -size * 0.04, y + size * 0.08);
+      context.stroke();
+      polygon(context, palette.b, size * 0.5, y + size * 0.22, size * 0.42, y - size * 0.45, size * 0.04, y + size * 0.08);
+      context.stroke();
+      context.beginPath();
+      context.moveTo(-size * 0.48, y + size * 0.18);
+      context.lineTo(size * 0.48, y + size * 0.18);
+      context.stroke();
+    } else if (accessoryId === "bunny") {
+      context.fillStyle = palette.paper;
+      [-1, 1].forEach((side) => {
+        context.beginPath();
+        context.ellipse(side * size * 0.2, y - size * 0.22, size * 0.16, size * 0.48, side * 0.12, 0, Math.PI * 2);
+        context.fill();
+        context.stroke();
+      });
+      context.strokeStyle = palette.b;
+      context.beginPath();
+      context.moveTo(-size * 0.38, y + size * 0.2);
+      context.lineTo(size * 0.38, y + size * 0.2);
+      context.stroke();
+    } else if (accessoryId === "rocketCharm") {
+      context.translate(size * 0.2, y);
+      context.rotate(0.35);
+      context.fillStyle = palette.paper;
+      context.beginPath();
+      context.ellipse(0, -size * 0.06, size * 0.2, size * 0.48, 0, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+      polygon(context, palette.g, 0, -size * 0.58, -size * 0.2, -size * 0.26, size * 0.2, -size * 0.26);
+      context.stroke();
+      polygon(context, palette.c, -size * 0.1, size * 0.4, 0, size * 0.72, size * 0.1, size * 0.4);
+    } else if (accessoryId === "starAntenna") {
+      context.beginPath();
+      context.moveTo(0, y + size * 0.32);
+      context.lineTo(0, y - size * 0.34);
+      context.stroke();
+      context.fillStyle = palette.c;
+      context.beginPath();
+      for (let i = 0; i < 10; i += 1) {
+        const radius = i % 2 === 0 ? size * 0.3 : size * 0.13;
+        const angle = -Math.PI / 2 + i * Math.PI / 5;
+        const px = Math.cos(angle) * radius;
+        const py = y - size * 0.42 + Math.sin(angle) * radius;
+        if (i === 0) context.moveTo(px, py); else context.lineTo(px, py);
+      }
+      context.closePath();
+      context.fill();
+      context.stroke();
+    } else if (accessoryId === "pirate") {
+      context.beginPath();
+      context.moveTo(-size * 0.34, y + size * 0.38);
+      context.lineTo(-size * 0.34, y - size * 0.52);
+      context.stroke();
+      context.fillStyle = palette.ink;
+      context.beginPath();
+      context.moveTo(-size * 0.3, y - size * 0.48);
+      context.lineTo(size * 0.46, y - size * 0.34);
+      context.lineTo(-size * 0.3, y - size * 0.05);
+      context.closePath();
+      context.fill();
+      context.fillStyle = palette.paper;
+      context.beginPath();
+      context.arc(0, y - size * 0.26, size * 0.1, 0, Math.PI * 2);
+      context.fill();
+      context.strokeStyle = palette.paper;
+      context.beginPath();
+      context.moveTo(-size * 0.12, y - size * 0.1);
+      context.lineTo(size * 0.15, y - size * 0.39);
+      context.moveTo(size * 0.15, y - size * 0.1);
+      context.lineTo(-size * 0.12, y - size * 0.39);
+      context.stroke();
+    }
+    context.restore();
+  }
+
+  function drawCar(context, x, y, scale, model, color, steer, airborne, accessoryId) {
     context.save();
     context.translate(x, y);
     const tilt = steer * 0.08;
@@ -2484,6 +2837,8 @@ svg {
       context.stroke();
     }
 
+    drawAccessory(context, dims, accessoryId);
+
     context.restore();
   }
 
@@ -2524,7 +2879,7 @@ svg {
     const carScale = currentCar().scale;
     const lift = game.jumpY * 0.72;
     const bounce = state === "playing" || state === "countdown" ? Math.sin(game.distance * 0.012) * 2 : Math.sin(performance.now() * 0.002) * 3;
-    drawCar(ctx, W / 2 + steering * 22, H - 115 - lift + bounce, carScale + game.jumpY * 0.00018, settings.model, palette[colorKeys[settings.color]], steering, game.jumpY);
+    drawCar(ctx, W / 2 + steering * 22, H - 115 - lift + bounce, carScale + game.jumpY * 0.00018, settings.model, palette[colorKeys[settings.color]], steering, game.jumpY, economy.equipped);
   }
 
   function resetOpponents() {
@@ -2544,9 +2899,9 @@ svg {
       let pace = opponent.speed * difficulty * wobble;
       if (opponent.challenger) {
         const playerPace = game.speed / MAX_SPEED;
-        const gapCorrection = clamp((1200 - gap) / 18000, -0.38, 0.18);
-        const adaptivePace = clamp(playerPace + gapCorrection, 0.4, 1.12);
-        pace = pace * 0.32 + adaptivePace * 0.68;
+        const gapCorrection = clamp((900 - gap) / 10000, -0.62, 0.26);
+        const adaptivePace = clamp(playerPace + gapCorrection, 0.28, 1.18);
+        pace = pace * 0.18 + adaptivePace * 0.82;
       }
       opponent.distance += MAX_SPEED * pace * dt;
       opponent.laneNow = clamp(opponent.lane + Math.sin(opponent.distance * 0.000055 + opponent.phase) * 0.16, -0.76, 0.76);
@@ -2638,7 +2993,7 @@ svg {
     const y = p.y - 108 * scale - ghost.jumpY * 0.48;
     ctx.save();
     ctx.globalAlpha = 0.5;
-    drawCar(ctx, x, y, scale, model, palette[colorKeys[duel.player1Car.color]], 0, ghost.jumpY);
+    drawCar(ctx, x, y, scale, model, palette[colorKeys[duel.player1Car.color]], 0, ghost.jumpY, duel.player1Car.accessory);
     ctx.globalAlpha = 0.9;
     if (scale > 0.16) {
       ctx.font = `700 ${Math.max(10, scale * 25)}px ui-rounded, system-ui`;
@@ -2691,7 +3046,7 @@ svg {
     const points = Math.round(basePoints * multiplier);
     game.score += points;
     burst(color, 12 + Math.min(game.combo, 6));
-    showToast(`${label} +${points}${game.combo > 1 ? ` · ×${game.combo}` : ""}`, true);
+    showToast(`${label} 🪙 +${points}${game.combo > 1 ? ` · ×${game.combo}` : ""}`, true);
     return points;
   }
 
@@ -2739,6 +3094,7 @@ svg {
     const acceleration = offroad ? car.offroadAcceleration : car.acceleration;
     const stalled = game.stallTimer > 0;
     game.stallTimer = Math.max(0, game.stallTimer - dt);
+    game.pitRecoveryTimer = Math.max(0, game.pitRecoveryTimer - dt);
     if (stalled) game.speed = 0;
     else game.speed += (targetSpeed - game.speed) * clamp(dt * acceleration, 0, 1);
     if (game.hitCooldown > 0) game.hitCooldown -= dt;
@@ -2754,7 +3110,7 @@ svg {
         game.offroadTimer = 0;
         game.score = Math.max(0, game.score - 3);
         resetCombo();
-        showToast("Çimlerin gıdıklıyor! −3", false);
+        showToast("Çimlerde para saçıldı! 🪙 −3", false);
       }
     } else {
       game.offroadTimer = 0;
@@ -2803,6 +3159,31 @@ svg {
     updateHud();
   }
 
+  function fallIntoPit() {
+    const rewindDistance = SEGMENT_LENGTH * 18;
+    game.pitFalls += 1;
+    game.score = Math.max(0, game.score - 35);
+    game.distance = Math.max(0, game.distance - rewindDistance);
+    game.position = wrap(game.distance, trackLength);
+    game.lap = Math.floor(game.distance / trackLength);
+    game.speed = 0;
+    game.stallTimer = 0.9;
+    game.pitRecoveryTimer = 0.9;
+    game.hitCooldown = 1.25;
+    game.jumpY = 0;
+    game.jumpVelocity = 0;
+    game.airAction = false;
+    game.rampJump = false;
+    game.boostTimer = 0;
+    resetCombo();
+    shake = 18;
+    flash = 1;
+    burst("#2a203d", 34);
+    showToast("GÜM! Çukura düştün · biraz geriden devam! −35", false);
+    tone(58, 0.28, "sawtooth", 0.09);
+    if (navigator.vibrate) navigator.vibrate([90, 45, 110]);
+  }
+
   function checkItems() {
     const car = currentCar();
     const playerSegment = findSegment(game.position + PLAYER_Z);
@@ -2810,8 +3191,9 @@ svg {
       const segment = segments[wrap(playerSegment.index + offset, segments.length)];
       segment.items.forEach((item) => {
         const rewardRange = game.magnetTimer > 0 ? 0.82 : 0.24;
-        const hitRange = item.reward ? rewardRange : item.ramp ? 0.36 : item.type === "wall" ? 0.42 : 0.29;
-        if (item.touchedLap === game.lap || Math.abs(game.playerX - item.offset) > hitRange) return;
+        const hitRange = item.reward ? rewardRange : item.ramp ? 0.36 : item.type === "wall" ? 0.55 : 0.29;
+        const outsideHitRange = item.type !== "pit" && Math.abs(game.playerX - item.offset) > hitRange;
+        if (item.touchedLap === game.lap || outsideHitRange) return;
         item.touchedLap = game.lap;
         if (item.ramp) {
           if (game.jumpY <= 4) {
@@ -2822,7 +3204,7 @@ svg {
         } else if (item.reward) {
           if (game.jumpY > 18) game.airAction = true;
           let basePoints = 7;
-          let label = "Halka";
+          let label = "Para";
           let color = palette.f;
 
           if (item.type === "star") {
@@ -2848,12 +3230,21 @@ svg {
 
           awardCombo(basePoints, label, color);
           tone(item.type === "bolt" ? 780 : item.type === "shield" ? 560 : 640, 0.075, "sine", 0.05);
+        } else if (item.type === "pit") {
+          if (game.jumpY > 78) {
+            game.airAction = true;
+            awardCombo(14, "Çukuru aştın", palette.e);
+            tone(510, 0.08, "triangle", 0.05);
+          } else {
+            fallIntoPit();
+          }
         } else if (game.jumpY > (item.type === "wall" ? 105 : 62)) {
           game.airAction = true;
           awardCombo(item.type === "wall" ? 12 : 5, item.type === "wall" ? "Duvarı aştın" : "Havadan sıyırdın", palette.d);
           tone(480, 0.05, "triangle", 0.04);
         } else if (item.type === "wall") {
           game.wallHits += 1;
+          game.pitRecoveryTimer = 0;
           const shielded = game.shield > 0;
           if (shielded) game.shield = 0;
           const wallPenalty = shielded ? 0 : car.wallPenalty;
@@ -2865,7 +3256,7 @@ svg {
           shake = 13;
           flash = 1;
           burst(palette.g, 28);
-          showToast(shielded ? "DUVAR! Kalkan puanı korudu · motor toparlanıyor" : `DUVAR! −${wallPenalty} · motor toparlanıyor`, false);
+          showToast(shielded ? "DUVAR! Kalkan paranı korudu · motor toparlanıyor" : `DUVAR! 🪙 −${wallPenalty} · motor toparlanıyor`, false);
           tone(72, 0.2, "sawtooth", 0.085);
           if (navigator.vibrate) navigator.vibrate([70, 40, 70]);
         } else if (game.shield > 0) {
@@ -2884,7 +3275,7 @@ svg {
           shake = 9;
           flash = 1;
           burst(palette.b, 20);
-          showToast(`PAT! −${crashPenalty}`, false);
+          showToast(`PAT! 🪙 −${crashPenalty}`, false);
           tone(95, 0.12, "sawtooth", 0.075);
           if (navigator.vibrate) navigator.vibrate([35, 25, 35]);
         }
@@ -2917,7 +3308,7 @@ svg {
 
     const powers = [];
     if (game.shield > 0) powers.push("🫧");
-    if (game.stallTimer > 0) powers.push("🧱");
+    if (game.stallTimer > 0) powers.push(game.pitRecoveryTimer > 0 ? "🕳️" : "🧱");
     if (game.boostTimer > 0) powers.push(`⚡ ${game.boostTimer.toFixed(1).replace(".", ",")} sn`);
     if (game.magnetTimer > 0) powers.push("🧲");
     ui.power.textContent = powers.join(" ");
@@ -3043,10 +3434,12 @@ svg {
     game.magnetTimer = 0;
     game.shield = 0;
     game.stallTimer = 0;
+    game.pitRecoveryTimer = 0;
     game.hitCooldown = 0;
     game.offroadTimer = 0;
     game.raceTime = 0;
     game.wallHits = 0;
+    game.pitFalls = 0;
     game.particles.length = 0;
     segments.forEach((segment) => segment.items.forEach((item) => { item.touchedLap = -1; }));
     steering = 0;
@@ -3082,6 +3475,7 @@ svg {
       time: game.raceTime,
       score: Math.floor(game.score),
       wallHits: game.wallHits,
+      pitFalls: game.pitFalls,
       perfectLandings: game.perfectLandings,
       car: carSnapshot()
     };
@@ -3094,7 +3488,7 @@ svg {
       duel.player1Result = raceResult();
       state = "duel-switch";
       garageReturn = "duel";
-      ui.duelFirstResult.textContent = `⏱ ${formatTime(duel.player1Result.time)} · ${duel.player1Result.score} puan · ${duel.player1Result.wallHits} duvar`;
+      ui.duelFirstResult.textContent = `⏱ ${formatTime(duel.player1Result.time)} · 🪙 ${duel.player1Result.score} · 🧱 ${duel.player1Result.wallHits} · 🕳️ ${duel.player1Result.pitFalls}`;
       ui.duelCarLine.textContent = `2. oyuncu arabası: ${carDescription(carSnapshot())}`;
       setScreen(ui.duelSwitch);
       tone(590, 0.11, "triangle", 0.05);
@@ -3109,7 +3503,10 @@ svg {
     let winner = 0;
     if (timeDifference > 0.05) winner = first.time < second.time ? 1 : 2;
     else if (first.score !== second.score) winner = first.score > second.score ? 1 : 2;
+    else if (first.pitFalls !== second.pitFalls) winner = first.pitFalls < second.pitFalls ? 1 : 2;
     else if (first.wallHits !== second.wallHits) winner = first.wallHits < second.wallHits ? 1 : 2;
+
+    const duelEarnings = creditMoney(first.score + second.score);
 
     state = "finish";
     ui.finishTitle.textContent = "Hayalet Düello tamam!";
@@ -3118,10 +3515,10 @@ svg {
     ui.finishStars.classList.add("zzr-hidden");
     ui.duelSummary.classList.remove("zzr-hidden");
     ui.duelSummary.innerHTML = `
-      <div class="zzr-duel-result${winner === 1 ? " is-winner" : ""}"><strong>👻 1. Oyuncu</strong>${formatTime(first.time)}<br>${first.score} puan · 🧱 ${first.wallHits}</div>
-      <div class="zzr-duel-result${winner === 2 ? " is-winner" : ""}"><strong>🏎️ 2. Oyuncu</strong>${formatTime(second.time)}<br>${second.score} puan · 🧱 ${second.wallHits}</div>`;
-    ui.missionLine.textContent = winner === 0 ? "Süreler eşit! Puan ve duvar sayısı da düğümlendi." : `Aradaki fark: ${timeDifference.toFixed(2).replace(".", ",")} saniye`;
-    ui.bestLine.textContent = `Duvarlar: 1. oyuncu ${first.wallHits} · 2. oyuncu ${second.wallHits}`;
+      <div class="zzr-duel-result${winner === 1 ? " is-winner" : ""}"><strong>👻 1. Oyuncu</strong>${formatTime(first.time)}<br>🪙 ${first.score} · 🧱 ${first.wallHits} · 🕳️ ${first.pitFalls}</div>
+      <div class="zzr-duel-result${winner === 2 ? " is-winner" : ""}"><strong>🏎️ 2. Oyuncu</strong>${formatTime(second.time)}<br>🪙 ${second.score} · 🧱 ${second.wallHits} · 🕳️ ${second.pitFalls}</div>`;
+    ui.missionLine.textContent = winner === 0 ? `Tam beraberlik! Cüzdana 🪙 ${duelEarnings} eklendi.` : `Fark ${timeDifference.toFixed(2).replace(".", ",")} sn · Cüzdana 🪙 ${duelEarnings}`;
+    ui.bestLine.textContent = `Cüzdan 🪙 ${economy.wallet} · Çukurlar: ${first.pitFalls}/${second.pitFalls} · Duvarlar: ${first.wallHits}/${second.wallHits}`;
     ui.again.textContent = "Rövanş!";
     setScreen(ui.finish);
     tone(660, 0.13, "triangle", 0.055);
@@ -3140,6 +3537,7 @@ svg {
     const previousBest = bestScore;
     bestScore = Math.max(bestScore, final);
     saveBest();
+    creditMoney(final);
     ui.finishTitle.textContent = settings.mode === "coop" ? "Takım parkuru tamam!" : "Parkur tamam!";
     ui.finalScore.textContent = String(final);
     ui.finishPlace.textContent = settings.mode === "coop"
@@ -3150,8 +3548,8 @@ svg {
     ui.duelSummary.classList.add("zzr-hidden");
     ui.finishStars.textContent = "★".repeat(stars) + "☆".repeat(3 - stars);
     ui.finishStars.setAttribute("aria-label", `${stars} yıldız kazandın`);
-    ui.missionLine.textContent = `Bitir ✓ · ${currentTrack().targetScore} puan ${scoreGoal ? "✓" : "○"} · 3 mükemmel iniş ${landingGoal ? "✓" : `(${game.perfectLandings}/3)`}`;
-    ui.bestLine.textContent = final > previousBest ? "Yeni rekor! Garajdaki lastikler alkışlıyor." : `En iyi puan: ${bestScore}`;
+    ui.missionLine.textContent = `Bitir ✓ · 🪙 ${currentTrack().targetScore} ${scoreGoal ? "✓" : "○"} · 3 mükemmel iniş ${landingGoal ? "✓" : `(${game.perfectLandings}/3)`}`;
+    ui.bestLine.textContent = final > previousBest ? `Yeni kazanç rekoru! · Cüzdan 🪙 ${economy.wallet}` : `En iyi kazanç: 🪙 ${bestScore} · Cüzdan: 🪙 ${economy.wallet}`;
     ui.again.textContent = "Bir daha!";
     setScreen(ui.finish);
     tone(660, 0.13, "triangle", 0.055);
@@ -3234,7 +3632,7 @@ svg {
       }
     }
     previewCtx.globalAlpha = 1;
-    drawCar(previewCtx, preview.width / 2, preview.height / 2 + 6, currentCar().previewScale, settings.model, palette[colorKeys[settings.color]], 0.18, 0);
+    drawCar(previewCtx, preview.width / 2, preview.height / 2 + 6, currentCar().previewScale, settings.model, palette[colorKeys[settings.color]], 0.18, 0, economy.equipped);
   }
 
   function refreshGarage() {
@@ -3246,7 +3644,25 @@ svg {
     });
     const stats = currentCar().stats;
     ui.modelStats.textContent = `Hız ${stats[0]}/5 · Zıplama ${stats[1]}/5 · Direksiyon ${stats[2]}/5 · Güç ${stats[3]}/5`;
+    root.querySelectorAll("[data-accessory]").forEach((button) => {
+      const id = button.dataset.accessory;
+      const accessory = ACCESSORIES[id] || ACCESSORIES.none;
+      const owned = economy.owned.includes(id);
+      const selected = economy.equipped === id;
+      const detail = button.querySelector("small");
+      button.classList.toggle("is-owned", owned);
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+      button.setAttribute("aria-disabled", String(!owned && economy.wallet < accessory.price));
+      if (detail) detail.textContent = selected ? "Takılı" : owned ? "Tak" : `🪙 ${accessory.price}`;
+    });
+    refreshWallet();
     drawPreview();
+  }
+
+  function refreshWallet() {
+    ui.walletMenu.textContent = String(economy.wallet);
+    ui.walletGarage.textContent = String(economy.wallet);
   }
 
   function refreshTrackPicker() {
@@ -3256,7 +3672,7 @@ svg {
       button.setAttribute("aria-pressed", String(selected));
     });
     const stars = progress.trackStars[settings.track] || 0;
-    ui.trackNote.textContent = `Hedef ${currentTrack().targetScore} · ${"★".repeat(stars)}${"☆".repeat(3 - stars)} · ${currentTrack().note}`;
+    ui.trackNote.textContent = `Hedef 🪙 ${currentTrack().targetScore} · ${"★".repeat(stars)}${"☆".repeat(3 - stars)} · ${currentTrack().note}`;
   }
 
   function refreshModePicker() {
@@ -3377,6 +3793,28 @@ svg {
     refreshGarage();
     tone(520 + settings.color * 40, 0.05, "sine", 0.035);
   }));
+  root.querySelectorAll("[data-accessory]").forEach((button) => button.addEventListener("click", () => {
+    const id = button.dataset.accessory;
+    const accessory = ACCESSORIES[id];
+    if (!accessory) return;
+    if (!economy.owned.includes(id)) {
+      if (economy.wallet < accessory.price) {
+        showToast(`${accessory.label} için 🪙 ${accessory.price - economy.wallet} daha gerekli`, false);
+        tone(120, 0.08, "square", 0.035);
+        return;
+      }
+      economy.wallet -= accessory.price;
+      economy.owned.push(id);
+      showToast(`${accessory.label} senin oldu!`, true);
+      tone(720, 0.09, "triangle", 0.05);
+    } else {
+      showToast(id === "none" ? "Araba sade haliyle hazır" : `${accessory.label} takıldı!`, true);
+      tone(480, 0.06, "sine", 0.035);
+    }
+    economy.equipped = id;
+    saveEconomy();
+    refreshGarage();
+  }));
   root.querySelectorAll("[data-track]").forEach((button) => button.addEventListener("click", () => {
     settings.track = TRACK_ORDER.includes(button.dataset.track) ? button.dataset.track : "neighborhood";
     saveSettings();
@@ -3472,7 +3910,7 @@ svg {
           location.reload();
         });
       }
-      navigator.serviceWorker.register("./sw.js?v=5", { updateViaCache: "none" })
+      navigator.serviceWorker.register("./sw.js?v=6", { updateViaCache: "none" })
         .then((registration) => registration.update())
         .catch(() => {
           /* Offline installation is optional; the game remains playable online. */
