@@ -2,7 +2,7 @@
 <html lang="tr" data-visualize-standalone>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <title>ZıpZıp Ralli</title>
 <meta name="description" content="Kıvrımlı parkurda engellerin üzerinden zıplayıp ödül topladığın eğlenceli çocuk araba oyunu.">
@@ -938,27 +938,59 @@ svg {
 </div>
 
 <style>
-  #zzr-game {
-    --zzr-ink: var(--foreground);
-    --zzr-paper: var(--background);
-    --zzr-panel: var(--card);
-    --zzr-panel-ink: var(--card-foreground);
-    --zzr-line: var(--border);
-    --zzr-a: var(--viz-series-1);
-    --zzr-b: var(--viz-series-2);
-    --zzr-c: var(--viz-series-3);
-    --zzr-d: var(--viz-series-4);
-    --zzr-e: var(--viz-series-5);
-    --zzr-f: var(--viz-series-6);
-    position: relative;
+  html,
+  body {
     width: 100%;
-    aspect-ratio: 16 / 9;
-    min-height: 320px;
-    max-height: 680px;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background: #fff8e7 !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html > body,
+  :root:not([data-app-block-surface]) > body {
+    padding: 0;
+  }
+
+  #zzr-game {
+    --foreground: #17202a;
+    --background: #fff8e7;
+    --card: #fffdf7;
+    --card-foreground: #17202a;
+    --primary: #49a7ff;
+    --primary-foreground: #ffffff;
+    --secondary: #fffdf7;
+    --secondary-foreground: #17202a;
+    --muted: #e8e2d8;
+    --muted-foreground: #5e6873;
+    --accent: #e5f2ff;
+    --accent-foreground: #176cae;
+    --border: #d9d3c8;
+    --input: #d9d3c8;
+    --ring: #339cff;
+    --zzr-ink: #17202a;
+    --zzr-paper: #fff8e7;
+    --zzr-panel: #fffdf7;
+    --zzr-panel-ink: #17202a;
+    --zzr-line: #7d8792;
+    --zzr-a: #49a7ff;
+    --zzr-b: #f074b5;
+    --zzr-c: #ffd54a;
+    --zzr-d: #75d68a;
+    --zzr-e: #9b79ec;
+    --zzr-f: #ff8b45;
+    position: relative;
+    width: var(--zzr-viewport-width, 100vw);
+    height: var(--zzr-viewport-height, 100vh);
+    min-height: 0;
+    max-height: none;
     overflow: hidden;
     color: var(--zzr-ink);
     background: var(--zzr-paper);
-    border-radius: 18px;
+    border-radius: 0;
     isolation: isolate;
     touch-action: none;
     user-select: none;
@@ -971,13 +1003,17 @@ svg {
     display: block;
     width: 100%;
     height: 100%;
+    background: #fff8e7;
   }
 
   #zzr-game .zzr-hidden { display: none !important; }
 
   #zzr-game .zzr-hud {
     position: absolute;
-    inset: 12px 12px auto 12px;
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+    left: 12px;
     display: none;
     align-items: center;
     justify-content: space-between;
@@ -997,18 +1033,22 @@ svg {
 
   #zzr-game .zzr-screen {
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 7;
     display: grid;
     place-items: center;
     padding: 24px;
-    background: color-mix(in srgb, var(--zzr-paper) 38%, transparent);
+    background: rgba(255, 248, 231, 0.42);
     backdrop-filter: blur(3px);
   }
 
   #zzr-game .zzr-menu-card,
   #zzr-game .zzr-small-card {
     position: relative;
+    width: 72%;
     width: min(430px, 72%);
     text-align: center;
     padding: 24px;
@@ -1039,6 +1079,7 @@ svg {
   }
 
   #zzr-game .zzr-garage-card {
+    width: 90%;
     width: min(720px, 90%);
     max-height: 92%;
     overflow: auto;
@@ -1062,12 +1103,12 @@ svg {
     place-items: center;
     overflow: hidden;
     background:
-      radial-gradient(circle at 20% 25%, color-mix(in srgb, var(--zzr-c) 38%, transparent) 0 4px, transparent 5px),
-      linear-gradient(145deg, color-mix(in srgb, var(--zzr-a) 18%, var(--zzr-panel)), color-mix(in srgb, var(--zzr-d) 20%, var(--zzr-panel)));
+      radial-gradient(circle at 20% 25%, rgba(255, 213, 74, 0.38) 0 4px, transparent 5px),
+      linear-gradient(145deg, #e6f3ff, #eaf8ed);
     border-radius: 12px;
   }
 
-  #zzr-preview { width: min(360px, 100%); height: 100%; }
+  #zzr-preview { width: 100%; width: min(360px, 100%); height: 100%; }
 
   #zzr-game .zzr-fieldset {
     border: 0;
@@ -1109,7 +1150,10 @@ svg {
 
   #zzr-game .zzr-controls {
     position: absolute;
-    inset: auto 18px 14px 18px;
+    top: auto;
+    right: 18px;
+    bottom: 14px;
+    left: 18px;
     z-index: 6;
     display: flex;
     justify-content: space-between;
@@ -1131,14 +1175,16 @@ svg {
     -webkit-appearance: none;
     cursor: grab;
     color: var(--zzr-panel-ink);
-    background: color-mix(in srgb, var(--zzr-panel) 78%, transparent);
-    border: 7px solid color-mix(in srgb, var(--zzr-ink) 72%, transparent);
-    box-shadow: 0 8px 0 color-mix(in srgb, var(--zzr-ink) 25%, transparent);
+    background: rgba(255, 253, 247, 0.88);
+    border: 7px solid rgba(23, 32, 42, 0.78);
+    box-shadow: 0 8px 0 rgba(23, 32, 42, 0.25);
   }
 
   #zzr-game .zzr-wheel {
-    width: clamp(88px, 14vw, 142px);
-    height: clamp(88px, 14vw, 142px);
+    width: 112px;
+    height: 112px;
+    width: clamp(82px, 22vh, 132px);
+    height: clamp(82px, 22vh, 132px);
     border-radius: 50%;
     position: relative;
     transform: rotate(var(--wheel-angle, 0deg));
@@ -1148,8 +1194,11 @@ svg {
   #zzr-game .zzr-wheel::after {
     content: "";
     position: absolute;
-    inset: 43% 7%;
-    background: color-mix(in srgb, var(--zzr-ink) 72%, transparent);
+    top: 43%;
+    right: 7%;
+    bottom: 43%;
+    left: 7%;
+    background: rgba(23, 32, 42, 0.78);
     border-radius: 99px;
   }
 
@@ -1161,6 +1210,7 @@ svg {
     display: grid;
     place-items: center;
     width: 45%;
+    height: 45%;
     aspect-ratio: 1;
     margin: auto;
     border-radius: 50%;
@@ -1169,21 +1219,24 @@ svg {
   }
 
   #zzr-game .zzr-jump {
-    width: clamp(92px, 15vw, 154px);
+    width: 118px;
+    height: 118px;
+    width: clamp(86px, 23vh, 138px);
+    height: clamp(86px, 23vh, 138px);
     aspect-ratio: 1;
     border-radius: 46% 54% 50% 43%;
     cursor: pointer;
     background: var(--zzr-c);
-    color: var(--background);
+    color: var(--zzr-ink);
     transform: rotate(-3deg);
   }
 
-  #zzr-game .zzr-jump:active { transform: translateY(6px) rotate(-3deg); box-shadow: 0 2px 0 color-mix(in srgb, var(--zzr-ink) 25%, transparent); }
+  #zzr-game .zzr-jump:active { transform: translateY(6px) rotate(-3deg); box-shadow: 0 2px 0 rgba(23, 32, 42, 0.25); }
   #zzr-game .zzr-control-label {
     padding: 3px 8px;
     border-radius: 99px;
     color: var(--zzr-panel-ink);
-    background: color-mix(in srgb, var(--zzr-panel) 82%, transparent);
+    background: rgba(255, 253, 247, 0.9);
   }
 
   #zzr-game .zzr-toast {
@@ -1207,7 +1260,10 @@ svg {
   #zzr-game .zzr-portrait {
     display: none;
     position: absolute;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 20;
     place-items: center;
     padding: 24px;
@@ -1218,28 +1274,54 @@ svg {
   #zzr-game .zzr-phone { margin: auto; width: 78px; padding: 20px 8px; border: 3px solid var(--zzr-ink); border-radius: 14px; }
 
   @media (orientation: portrait) and (max-width: 900px) {
-    #zzr-game { min-height: min(76vh, 620px); aspect-ratio: auto; }
     #zzr-game .zzr-portrait { display: grid; }
   }
 
   @media (max-width: 680px) {
-    #zzr-game { min-height: 300px; border-radius: 12px; }
     #zzr-game .zzr-screen { padding: 12px; }
     #zzr-game .zzr-menu-card,
-    #zzr-game .zzr-small-card { width: min(420px, 68%); padding: 14px; }
+    #zzr-game .zzr-small-card { width: 68%; width: min(420px, 68%); padding: 14px; }
     #zzr-game .zzr-menu-card p { margin: 4px 0 8px; }
     #zzr-game .zzr-menu-actions { margin-top: 8px; gap: 6px; }
     #zzr-game .zzr-garage-card { width: 94%; padding: 12px; }
     #zzr-game .zzr-garage-preview { height: 92px; }
-    #zzr-game .zzr-hud { inset: 6px 6px auto; }
+    #zzr-game .zzr-hud { top: 6px; right: 6px; bottom: auto; left: 6px; }
     #zzr-game .zzr-hud-actions .btn { padding-inline: 8px; }
-    #zzr-game .zzr-controls { inset: auto 10px 7px; }
+    #zzr-game .zzr-controls { top: auto; right: 10px; bottom: 7px; left: 10px; }
     #zzr-game .zzr-choice-grid { gap: 5px; }
   }
 
-  @media (display-mode: standalone) {
-    html > body { padding: 0 !important; overflow: hidden; }
-    #zzr-game { width: 100vw; height: 100dvh; max-height: none; min-height: 0; border-radius: 0; aspect-ratio: auto; }
+  @media (orientation: landscape) and (max-height: 520px) {
+    #zzr-game .zzr-screen { padding: 8px; }
+    #zzr-game .zzr-menu-card,
+    #zzr-game .zzr-small-card { width: 62%; width: min(430px, 62%); padding: 12px; }
+    #zzr-game .zzr-menu-card p,
+    #zzr-game .zzr-small-card p { margin: 4px 0 8px; }
+    #zzr-game .zzr-menu-actions { margin-top: 7px; gap: 6px; }
+    #zzr-game .zzr-hud { top: 6px; right: 8px; left: 8px; }
+    #zzr-game .zzr-controls { right: 10px; bottom: 7px; left: 10px; }
+    #zzr-game .zzr-control-label { font-size: 10px; line-height: 14px; }
+  }
+
+  @media (orientation: landscape) and (max-height: 350px) {
+    #zzr-game .zzr-control-label { display: none; }
+    #zzr-game .zzr-wheel { width: 76px; height: 76px; }
+    #zzr-game .zzr-jump { width: 80px; height: 80px; }
+    #zzr-game .zzr-hud .viz-badge { padding: 2px 6px; }
+    #zzr-game .zzr-hud-actions .btn { min-height: 26px; padding-inline: 6px; }
+  }
+
+  @supports (padding: env(safe-area-inset-left)) {
+    #zzr-game .zzr-hud {
+      top: calc(6px + env(safe-area-inset-top, 0px));
+      right: calc(8px + env(safe-area-inset-right, 0px));
+      left: calc(8px + env(safe-area-inset-left, 0px));
+    }
+    #zzr-game .zzr-controls {
+      right: calc(10px + env(safe-area-inset-right, 0px));
+      bottom: calc(7px + env(safe-area-inset-bottom, 0px));
+      left: calc(10px + env(safe-area-inset-left, 0px));
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1279,7 +1361,7 @@ svg {
     jump: root.querySelector("#zzr-jump")
   };
 
-  const W = 1280;
+  let W = 1280;
   const H = 720;
   const SEGMENT_LENGTH = 200;
   const ROAD_WIDTH = 2000;
@@ -1297,23 +1379,21 @@ svg {
   const percentRemaining = (n, total) => (n % total) / total;
   const wrap = (n, max) => ((n % max) + max) % max;
 
-  function cssVar(name) {
-    return getComputedStyle(root).getPropertyValue(name).trim();
-  }
+  const CANVAS_PALETTE = Object.freeze({
+    ink: "#17202a",
+    paper: "#fff8e7",
+    panel: "#fffdf7",
+    line: "#7d8792",
+    a: "#49a7ff",
+    b: "#f074b5",
+    c: "#ffd54a",
+    d: "#75d68a",
+    e: "#9b79ec",
+    f: "#ff8b45"
+  });
 
   function readPalette() {
-    return {
-      ink: cssVar("--zzr-ink"),
-      paper: cssVar("--zzr-paper"),
-      panel: cssVar("--zzr-panel"),
-      line: cssVar("--zzr-line"),
-      a: cssVar("--zzr-a"),
-      b: cssVar("--zzr-b"),
-      c: cssVar("--zzr-c"),
-      d: cssVar("--zzr-d"),
-      e: cssVar("--zzr-e"),
-      f: cssVar("--zzr-f")
-    };
+    return { ...CANVAS_PALETTE };
   }
 
   let palette = readPalette();
@@ -1331,6 +1411,29 @@ svg {
   let wheelPointer = null;
   let wheelOrigin = 0;
   const keys = new Set();
+
+  function syncViewport() {
+    const visual = window.visualViewport;
+    const bounds = root.getBoundingClientRect();
+    const viewportWidth = Math.max(320, Math.round(
+      visual && visual.width ? visual.width : (window.innerWidth || bounds.width || 1280)
+    ));
+    const viewportHeight = Math.max(240, Math.round(
+      visual && visual.height ? visual.height : (window.innerHeight || bounds.height || 720)
+    ));
+
+    root.style.setProperty("--zzr-viewport-width", `${viewportWidth}px`);
+    root.style.setProperty("--zzr-viewport-height", `${viewportHeight}px`);
+
+    const nextWidth = Math.round(H * clamp(viewportWidth / viewportHeight, 4 / 3, 3.25));
+    if (canvas.width !== nextWidth || canvas.height !== H) {
+      W = nextWidth;
+      canvas.width = W;
+      canvas.height = H;
+    } else {
+      W = nextWidth;
+    }
+  }
 
   const game = {
     distance: 0,
@@ -2070,9 +2173,8 @@ svg {
   }
 
   async function attemptLandscape() {
-    try {
-      if (window.matchMedia("(max-width: 980px)").matches && root.requestFullscreen && !document.fullscreenElement) await root.requestFullscreen();
-    } catch (_) { /* fullscreen is a convenience */ }
+    const standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+    if (!standalone) return;
     try {
       if (screen.orientation && screen.orientation.lock) await screen.orientation.lock("landscape");
     } catch (_) { /* not every browser allows orientation locking */ }
@@ -2173,7 +2275,9 @@ svg {
     event.preventDefault();
     wheelPointer = event.pointerId;
     wheelOrigin = event.clientX - steering * Math.max(52, ui.steerZone.getBoundingClientRect().width * 0.42);
-    ui.wheel.setPointerCapture(event.pointerId);
+    try {
+      if (ui.wheel.setPointerCapture) ui.wheel.setPointerCapture(event.pointerId);
+    } catch (_) { /* pointer capture is an enhancement */ }
     wheelMove(event);
   });
   ui.wheel.addEventListener("pointermove", wheelMove);
@@ -2205,7 +2309,51 @@ svg {
   window.addEventListener("keyup", (event) => keys.delete(event.code));
   window.addEventListener("blur", () => { if (state === "playing") pauseRace(); });
   document.addEventListener("visibilitychange", () => { if (document.hidden && state === "playing") pauseRace(); });
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { palette = readPalette(); drawPreview(); });
+  const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+  if (colorScheme.addEventListener) {
+    colorScheme.addEventListener("change", () => { palette = readPalette(); drawPreview(); });
+  }
+
+  if (!("PointerEvent" in window)) {
+    ui.jump.addEventListener("touchstart", (event) => {
+      event.preventDefault();
+      jump();
+    }, { passive: false });
+
+    ui.wheel.addEventListener("touchstart", (event) => {
+      const touch = event.changedTouches[0];
+      if (!touch) return;
+      event.preventDefault();
+      wheelPointer = touch.identifier;
+      wheelOrigin = touch.clientX - steering * Math.max(52, ui.steerZone.getBoundingClientRect().width * 0.42);
+      setSteering((touch.clientX - wheelOrigin) / Math.max(52, ui.steerZone.getBoundingClientRect().width * 0.42));
+    }, { passive: false });
+
+    ui.wheel.addEventListener("touchmove", (event) => {
+      const touches = Array.from(event.changedTouches);
+      const touch = touches.find((candidate) => candidate.identifier === wheelPointer);
+      if (!touch) return;
+      event.preventDefault();
+      const radius = Math.max(52, ui.steerZone.getBoundingClientRect().width * 0.42);
+      setSteering((touch.clientX - wheelOrigin) / radius);
+    }, { passive: false });
+
+    const releaseTouch = (event) => {
+      const touches = Array.from(event.changedTouches);
+      if (!touches.some((touch) => touch.identifier === wheelPointer)) return;
+      wheelPointer = null;
+      setSteering(0);
+    };
+    ui.wheel.addEventListener("touchend", releaseTouch);
+    ui.wheel.addEventListener("touchcancel", releaseTouch);
+  }
+
+  syncViewport();
+  window.addEventListener("resize", syncViewport, { passive: true });
+  window.addEventListener("orientationchange", () => window.setTimeout(syncViewport, 120), { passive: true });
+  if (window.visualViewport && window.visualViewport.addEventListener) {
+    window.visualViewport.addEventListener("resize", syncViewport, { passive: true });
+  }
 
   buildTrack();
   refreshGarage();
@@ -2215,250 +2363,24 @@ svg {
 })();
 </script>
 
-<script id="codex-visualization-floating-ui-core" src="https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js"></script>
-<script id="codex-visualization-floating-ui-dom" src="https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js"></script>
-<script id="codex-visualization-lucide" async src="https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js"></script>
-<script id="codex-visualization-tooltip">/* oxlint-disable typescript/no-unsafe-argument, typescript/no-unsafe-call, typescript/no-unsafe-return */
-// Runs inside the visualization sandbox, not the host webview.
-(() => {
-  if (window.FloatingUIDOM == null) {
-    return;
-  }
-  const { autoUpdate, computePosition, flip, offset, shift, size } =
-    window.FloatingUIDOM;
-  const tooltipPlacements = new Set(["top", "right", "bottom", "left"]);
-  const tooltipId = `codex-visualization-tooltip-${
-    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
-  }`;
-  const tooltipGap = 5;
-  const hoverDelay = 700;
-  const skipDelay = 300;
-  let activeTrigger = null;
-  let pendingTrigger = null;
-  let tooltip = null;
-  let openTimeout = null;
-  let autoUpdateCleanup = null;
-  let positionRequest = 0;
-  let skipDelayUntil = 0;
-
-  const getTrigger = (target) =>
-    target?.nodeType === Node.ELEMENT_NODE
-      ? target.closest("[data-tooltip]")
-      : null;
-  const containsTarget = (trigger, target) =>
-    target?.nodeType != null && trigger.contains(target);
-  const getContent = (trigger) =>
-    trigger.getAttribute("data-tooltip")?.trim() ?? "";
-  const getPlacement = (trigger) => {
-    const placement = trigger.getAttribute("data-tooltip-placement");
-    return tooltipPlacements.has(placement) ? placement : "top";
-  };
-  const getTooltip = () => {
-    if (tooltip == null) {
-      tooltip = document.createElement("div");
-      tooltip.id = tooltipId;
-      tooltip.className = "tooltip";
-      tooltip.setAttribute("role", "tooltip");
-    }
-    return tooltip;
-  };
-  const setDescribedBy = (trigger, described) => {
-    const ids = new Set(
-      (trigger.getAttribute("aria-describedby") ?? "")
-        .split(/\s+/)
-        .filter(Boolean),
-    );
-    if (described) {
-      ids.add(tooltipId);
-    } else {
-      ids.delete(tooltipId);
-    }
-    if (ids.size === 0) {
-      trigger.removeAttribute("aria-describedby");
-    } else {
-      trigger.setAttribute("aria-describedby", [...ids].join(" "));
-    }
-  };
-  const clearOpenTimeout = () => {
-    if (openTimeout != null) {
-      window.clearTimeout(openTimeout);
-      openTimeout = null;
-    }
-    pendingTrigger = null;
-  };
-  const closeTooltip = (activateSkipDelay = true) => {
-    clearOpenTimeout();
-    positionRequest += 1;
-    autoUpdateCleanup?.();
-    autoUpdateCleanup = null;
-    if (activeTrigger == null) {
-      return;
-    }
-    setDescribedBy(activeTrigger, false);
-    activeTrigger = null;
-    tooltip?.remove();
-    if (activateSkipDelay) {
-      skipDelayUntil = Date.now() + skipDelay;
-    }
-  };
-  const updatePosition = (trigger, floating) => {
-    const request = ++positionRequest;
-    void computePosition(trigger, floating, {
-      middleware: [
-        offset(tooltipGap),
-        flip({ padding: tooltipGap }),
-        shift({ padding: tooltipGap }),
-        size({
-          padding: tooltipGap,
-          apply({ availableHeight, availableWidth, elements }) {
-            elements.floating.style.setProperty(
-              "--tooltip-available-width",
-              `${Math.max(0, availableWidth)}px`,
-            );
-            elements.floating.style.setProperty(
-              "--tooltip-available-height",
-              `${Math.max(0, availableHeight)}px`,
-            );
-          },
-        }),
-      ],
-      placement: getPlacement(trigger),
-      strategy: "fixed",
-    })
-      .then(({ x, y }) => {
-        if (activeTrigger !== trigger || request !== positionRequest) {
-          return;
-        }
-        const scale = window.devicePixelRatio || 1;
-        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
-        floating.style.visibility = "visible";
-      })
-      .catch(() => {
-        if (activeTrigger === trigger && request === positionRequest) {
-          closeTooltip(false);
-        }
-      });
-  };
-  const openTooltip = (trigger) => {
-    const content = getContent(trigger);
-    if (!trigger.isConnected || content.length === 0) {
-      return;
-    }
-    clearOpenTimeout();
-    if (activeTrigger === trigger) {
-      return;
-    }
-    closeTooltip();
-    const floating = getTooltip();
-    floating.textContent = content;
-    floating.style.visibility = "hidden";
-    floating.style.transform = "translate(0, 0)";
-    document.body.appendChild(floating);
-    activeTrigger = trigger;
-    setDescribedBy(trigger, true);
-    autoUpdateCleanup = autoUpdate(trigger, floating, () => {
-      updatePosition(trigger, floating);
-    });
-  };
-  const requestOpen = (trigger, immediate = false) => {
-    if (
-      getContent(trigger).length === 0 ||
-      activeTrigger === trigger ||
-      pendingTrigger === trigger
-    ) {
-      return;
-    }
-    clearOpenTimeout();
-    pendingTrigger = trigger;
-    const delay =
-      immediate || activeTrigger != null || Date.now() < skipDelayUntil
-        ? 0
-        : hoverDelay;
-    if (delay === 0) {
-      openTooltip(trigger);
-      return;
-    }
-    openTimeout = window.setTimeout(() => {
-      openTimeout = null;
-      pendingTrigger = null;
-      openTooltip(trigger);
-    }, delay);
-  };
-  const handlePointerOpen = (event) => {
-    if (event.pointerType === "touch") {
-      return;
-    }
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    requestOpen(trigger);
-  };
-  const handleLeave = (event) => {
-    const trigger = getTrigger(event.target);
-    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
-      return;
-    }
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const handleFocusIn = (event) => {
-    const trigger = getTrigger(event.target);
-    if (trigger?.matches(":focus-visible")) {
-      requestOpen(trigger, true);
-    }
-  };
-  const handleKeyDown = (event) => {
-    if (event.key === "Escape") {
-      closeTooltip();
-    }
-  };
-  const handleContextMenu = (event) => {
-    const trigger = getTrigger(event.target);
-    if (activeTrigger === trigger || pendingTrigger === trigger) {
-      closeTooltip();
-    }
-  };
-  const destroy = () => {
-    closeTooltip(false);
-    document.removeEventListener("pointerover", handlePointerOpen);
-    document.removeEventListener("pointerout", handleLeave);
-    document.removeEventListener("focusin", handleFocusIn);
-    document.removeEventListener("focusout", handleLeave);
-    document.removeEventListener("keydown", handleKeyDown);
-    document.removeEventListener("contextmenu", handleContextMenu);
-    tooltip = null;
-  };
-
-  document.addEventListener("pointerover", handlePointerOpen);
-  document.addEventListener("pointerout", handleLeave);
-  document.addEventListener("focusin", handleFocusIn);
-  document.addEventListener("focusout", handleLeave);
-  document.addEventListener("keydown", handleKeyDown);
-  document.addEventListener("contextmenu", handleContextMenu);
-  window.addEventListener("pagehide", destroy, { once: true });
-})();
-</script>
-<script id="codex-visualization-lucide-initialization">(() => {
-  const initialize = () => {
-    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
-  };
-  if (globalThis.lucide != null) {
-    initialize();
-    return;
-  }
-  document
-    .getElementById("codex-visualization-lucide")
-    ?.addEventListener("load", initialize, { once: true });
-})();
-</script>
+<!-- Oyun çalışma zamanında harici betik veya ağ bağımlılığı kullanmaz. -->
 <script>
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(() => {
-        /* Offline installation is optional; the game remains playable online. */
-      });
+      const hadController = Boolean(navigator.serviceWorker.controller);
+      let refreshing = false;
+      if (hadController) {
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (refreshing) return;
+          refreshing = true;
+          location.reload();
+        });
+      }
+      navigator.serviceWorker.register("./sw.js?v=2", { updateViaCache: "none" })
+        .then((registration) => registration.update())
+        .catch(() => {
+          /* Offline installation is optional; the game remains playable online. */
+        });
     });
   }
 </script>

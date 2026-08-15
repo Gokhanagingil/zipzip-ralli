@@ -1,7 +1,8 @@
-const CACHE_NAME = "zipzip-ralli-v1";
+const CACHE_NAME = "zipzip-ralli-v2-mobile-fix";
+const OFFLINE_URL = "./index.html";
 const APP_SHELL = [
   "./",
-  "./index.html",
+  OFFLINE_URL,
   "./manifest.webmanifest",
   "./icons/icon.svg",
   "./icons/icon-192.png",
@@ -24,12 +25,25 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request, { cache: "no-store" }).then((response) => {
+        if (!response || !response.ok) throw new Error("Navigation response was not successful");
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(OFFLINE_URL, copy));
+        return response;
+      }).catch(() => caches.match(OFFLINE_URL))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
       if (!response || response.status !== 200 || response.type === "opaque") return response;
       const copy = response.clone();
       caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
       return response;
-    }).catch(() => caches.match("./index.html")))
+    }))
   );
 });

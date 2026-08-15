@@ -26,12 +26,19 @@ assert.match(index, /id="zzr-game"/);
 assert.match(index, /id="zzr-steer-zone"/);
 assert.match(index, /id="zzr-jump"/);
 assert.match(index, /data-model="bubble"/);
-assert.match(index, /navigator\.serviceWorker\.register\("\.\/sw\.js"\)/);
+assert.match(index, /navigator\.serviceWorker\.register\("\.\/sw\.js\?v=2"/);
+assert.match(index, /--zzr-viewport-height/);
+assert.match(index, /function syncViewport\(\)/);
+assert.match(index, /const CANVAS_PALETTE/);
+assert.doesNotMatch(index, /<script[^>]+src=/, "Oyun çalışma zamanında harici betik yüklememeli");
 assert.equal(manifest.display, "fullscreen");
 assert.equal(manifest.orientation, "landscape");
+assert.equal(manifest.start_url, "./?v=2");
 assert.equal(manifest.icons.length, 2);
-assert.match(worker, /CACHE_NAME = "zipzip-ralli-v1"/);
+assert.match(worker, /CACHE_NAME = "zipzip-ralli-v2-mobile-fix"/);
 assert.match(worker, /caches\.match/);
+assert.match(worker, /event\.request\.mode === "navigate"/);
+assert.match(worker, /cache: "no-store"/);
 assert.match(deployment, /actions\/checkout@v6/);
 assert.match(deployment, /actions\/configure-pages@v5/);
 assert.match(deployment, /actions\/upload-pages-artifact@v4/);
@@ -45,6 +52,12 @@ assert.deepEqual([...new Set(duplicates)], []);
 
 const inlineGame = index.match(/<script>\s*\(\(\) => \{([\s\S]*?)<\/script>/);
 assert.ok(inlineGame, "Oyun JavaScript'i bulunamadı");
+assert.doesNotMatch(inlineGame[1], /\?\.|\?\?/, "Oyun betiği eski mobil tarayıcılarda ayrıştırılabilmeli");
 new Function(`(() => {${inlineGame[1]}`);
+
+const gameStyles = index.match(/<style>\s*html,([\s\S]*?)<\/style>/);
+assert.ok(gameStyles, "Mobil oyun stilleri bulunamadı");
+assert.doesNotMatch(gameStyles[1], /color-mix|light-dark/, "Oyun stilleri temel mobil CSS renkleri kullanmalı");
+assert.match(gameStyles[1], /bottom: 14px/);
 
 console.log(`Doğrulama başarılı: ${files.length} PWA dosyası, ${ids.length} benzersiz id.`);

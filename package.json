@@ -1,6 +1,6 @@
 {
   "name": "zipzip-ralli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Yatay kullanılan, dokunmatik kontrollü ve çevrimdışı kurulabilen çocuk araba oyunu.",
   "type": "module",

@@ -3,7 +3,7 @@
 [![Quality checks](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/ci.yml/badge.svg)](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/ci.yml)
 [![GitHub Pages](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Gokhanagingil/zipzip-ralli/actions/workflows/deploy-pages.yml)
 
-## [Oyunu oyna →](https://gokhanagingil.github.io/zipzip-ralli/)
+## [Oyunu oyna →](https://gokhanagingil.github.io/zipzip-ralli/?v=2)
 
 10 yaş civarı çocuklar için hazırlanmış, telefon ve tablette yatay oynanan, çevrimdışı kurulabilen küçük bir PWA araba oyunudur.
 
