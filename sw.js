@@ -1,4 +1,4 @@
-const CACHE_NAME = "zipzip-ralli-v4-wall-garage";
+const CACHE_NAME = "zipzip-ralli-v5-two-player";
 const OFFLINE_URL = "./index.html";
 const APP_SHELL = [
   "./",
