@@ -28,7 +28,7 @@ jobs:
       - name: Validate PWA package
         run: node tests/validate.mjs
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Prepare static site
         run: |
           mkdir -p _site/icons
